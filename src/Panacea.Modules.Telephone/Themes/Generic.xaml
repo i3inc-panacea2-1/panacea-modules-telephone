@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Themes">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Panacea.Modules.Telephone;component/Themes/NumericButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

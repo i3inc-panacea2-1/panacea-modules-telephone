@@ -1,0 +1,168 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Controls">
+    <Style TargetType="local:DialPad">
+        <Style.Setters>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:DialPad">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="6*" />
+                            </Grid.RowDefinitions>
+                            <Grid Visibility="{Binding ElementName=MainControl, Path=InputVisibility}">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+                                <Viewbox HorizontalAlignment="Left">
+                                    <TextBlock
+                                        Name="NumberText"
+                                        Margin="15"
+                                        FontSize="{DynamicResource FontSize-Xxx-Huge}"
+                                        Foreground="White"
+                                        Text="{Binding ElementName=MainControl, Path=Number}" />
+                                </Viewbox>
+                                <RepeatButton
+                                    Name="DeleteButton"
+                                    Grid.Column="1"
+                                    Delay="500"
+                                    Interval="100"
+                                    Style="{StaticResource stylessWithBackground}"
+                                    Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
+                                    <Viewbox Margin="5,0" RenderTransformOrigin="0.5,0.5">
+                                        <Viewbox.RenderTransform>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="180" />
+                                            </TransformGroup>
+                                        </Viewbox.RenderTransform>
+
+                                        <Path
+                                            Margin="5,0,5,0"
+                                            Data="F1 M 132.206,43.8841C 133.71,45.435 133.71,47.8984 132.206,49.4492L 90.8724,92.1159C 90.1198,92.8945 89.0833,93.3334 88,93.3334L 4,93.3334C 1.79041,93.3334 0,91.543 0,89.3334L 0,4.00002C 0,1.79042 1.79041,1.52588e-005 4,1.52588e-005L 88,1.52588e-005C 89.0833,1.52588e-005 90.1198,0.438828 90.8724,1.21745L 132.206,43.8841 Z M 86.3046,85.3334L 123.764,46.6667L 86.3046,8.00005L 7.99997,8.00005L 7.99997,85.3334L 86.3046,85.3334 Z M 68.862,17.1504L 76.4713,24.6283L 54.8105,46.6667L 76.4713,68.7071L 68.862,76.185L 47.3333,54.2774L 25.804,76.185L 18.196,68.7071L 39.8561,46.6667L 18.196,24.6283L 25.804,17.1504L 47.3333,39.0574L 68.862,17.1504 Z "
+                                            Fill="White"
+                                            Stretch="Uniform" />
+
+                                    </Viewbox>
+                                </RepeatButton>
+                            </Grid>
+
+                            <UniformGrid
+                                Name="NumbersGrid"
+                                Grid.Row="1"
+                                Margin="0,20,0,0"
+                                Background="Transparent"
+                                Columns="3">
+
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="1"
+                                    Content="1"
+                                    Label="∞" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="2"
+                                    Content="2"
+                                    Label="ABC" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="3"
+                                    Content="3"
+                                    Label="DEF" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="4"
+                                    Content="4"
+                                    Label="GHI" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="5"
+                                    Content="5"
+                                    Label="JKL" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="6"
+                                    Content="6"
+                                    Label="MNO" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="7"
+                                    Content="7"
+                                    Label="PQRS" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="8"
+                                    Content="8"
+                                    Label="TUV" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="9"
+                                    Content="9"
+                                    Label="WXYZ" />
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="*"
+                                    BorderVisibility="Collapsed"
+                                    Content="*" />
+
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="0"
+                                    Content="0"
+                                    Label="+" />
+
+                                <local:NumericButton
+                                    Command="{TemplateBinding KeyPressCommand}"
+                                    CommandParameter="#"
+                                    BorderVisibility="Collapsed"
+                                    Content="#" />
+
+                                <Button
+                                    Command="{TemplateBinding AudioCallCommand}"
+                                    Margin="10"
+                                    Style="{StaticResource stylessWithBackground}"
+                                    Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
+                                    <Viewbox Margin="10" RenderTransformOrigin="0.5,0.5">
+                                        <Viewbox.RenderTransform>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="97" />
+                                            </TransformGroup>
+                                        </Viewbox.RenderTransform>
+                                        <Path
+                                            Data="F1 M 0.292511,15.8775C 0.0825195,15.5875 -0.0149841,15.365 0,15.21C 0.0150146,15.055 0.0300293,14.8325 0.0449829,14.5425C 0.0599976,14.2525 0.173737,13.9788 0.386261,13.7213C 0.598755,13.4637 0.88501,13.195 1.245,12.915C 1.85001,12.43 2.37625,12.0862 2.82376,11.8837C 3.27127,11.6813 3.67752,11.65 4.04251,11.79C 4.4075,11.93 4.66873,12.0625 4.82623,12.1875C 4.98376,12.3125 5.27249,12.6025 5.6925,13.0575C 6.36749,13.7275 7.91998,12.8325 10.35,10.3725C 12.78,7.91248 13.6725,6.36249 13.0275,5.72247C 12.2625,4.95251 11.835,4.3725 11.745,3.98248C 11.62,3.3125 12.0025,2.40002 12.8925,1.245C 13.1725,0.88501 13.4525,0.595032 13.7325,0.375C 14.0125,0.154968 14.2862,0.0374756 14.5537,0.022522C 14.8213,0.00750732 15.045,0 15.225,0C 15.405,0 15.6313,0.0974731 15.9038,0.29248C 16.1762,0.487488 16.3587,0.623718 16.4513,0.701233C 16.5437,0.778748 16.735,0.969971 17.025,1.27502C 17.315,1.58002 17.475,1.75 17.505,1.78497C 18.24,2.51501 18.1938,3.96625 17.3662,6.13873C 16.5388,8.31122 15.0038,10.5187 12.7613,12.7612C 10.5187,15.0037 8.3075,16.535 6.1275,17.355C 3.94751,18.175 2.49002,18.21 1.755,17.46L 1.28998,17.04C 0.975006,16.725 0.782501,16.525 0.712524,16.44C 0.642487,16.355 0.502502,16.1675 0.292511,15.8775 Z "
+                                            Fill="White"
+                                            Stretch="Uniform"
+                                            UseLayoutRounding="False" />
+                                    </Viewbox>
+                                </Button>
+
+                                <Label Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}" />
+                                <Grid Visibility="{Binding ElementName=MainControl, Path=VideoCallVisibility}">
+                                    <Button
+                                        Command="{TemplateBinding VideoCallCommand}"
+                                        Margin="10"
+                                        Style="{StaticResource stylessWithBackground}"
+                                        Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
+                                        <Viewbox Margin="10" RenderTransformOrigin="0.5,0.5">
+
+                                            <Path
+                                                Margin="3"
+                                                Data="F1 M 28.4657,7.12985L 38.0057,1.05301L 38.0057,18.0873L 28.4657,12.0105L 28.4657,7.12985 Z M 0,19.14L 26.2096,19.14L 26.2096,-3.05176e-005L 0,-3.05176e-005L 0,19.14 Z "
+                                                Fill="White"
+                                                Stretch="Uniform" />
+                                        </Viewbox>
+                                    </Button>
+                                </Grid>
+
+                            </UniformGrid>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+</ResourceDictionary>

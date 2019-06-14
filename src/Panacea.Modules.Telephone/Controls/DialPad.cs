@@ -87,6 +87,29 @@ namespace Panacea.Modules.Telephone.Controls
         public static readonly DependencyProperty VideoCallCommandProperty =
             DependencyProperty.Register("VideoCallCommand", typeof(ICommand), typeof(DialPad), new PropertyMetadata(null));
 
+        public ICommand BackspaceCommand
+        {
+            get { return (ICommand)GetValue(BackspaceCommandProperty); }
+            set { SetValue(BackspaceCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VideoCallCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BackspaceCommandProperty =
+            DependencyProperty.Register("BackspaceCommand", typeof(ICommand), typeof(DialPad), new PropertyMetadata(null));
+
+
+
+
+        public string Number
+        {
+            get { return (string)GetValue(NumberProperty); }
+            set { SetValue(NumberProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Number.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NumberProperty =
+            DependencyProperty.Register("Number", typeof(string), typeof(DialPad), new PropertyMetadata(null));
+
 
 
     }

@@ -8,7 +8,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0,0,0,5" />
@@ -20,22 +20,23 @@
                     <Grid Background="{TemplateBinding Background}">
                         <pcontrols:RippleEffectDecorator>
                             <Grid
-                            Margin="4"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                Margin="4"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <ContentPresenter
-                                Margin="0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Bottom"
-                                Content="{TemplateBinding Content}">
+                                    Margin="0"
+                                    Name="Presenter"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    Content="{TemplateBinding Content}">
                                     <ContentPresenter.Resources>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="pcontrols:Material.RelativeFontSizeRatio" Value="2.4" />
+                                            <Setter Property="pcontrols:Material.RelativeFontSizeRatio" Value="2.8" />
                                             <Setter Property="Padding" Value="0" />
                                             <Setter Property="Margin" Value="3" />
                                             <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
@@ -44,14 +45,14 @@
                                     </ContentPresenter.Resources>
                                 </ContentPresenter>
                                 <TextBlock
-                                Grid.Column="1"
-                                Margin="3"
-                                VerticalAlignment="Bottom"
-                                pcontrols:Material.RelativeFontSizeRatio="1.0"
-                                FontWeight="Light"
-                                LineHeight="{DynamicResource FontSize-Xxx-Huge}"
-                                LineStackingStrategy="BlockLineHeight"
-                                Text="{TemplateBinding Label}" />
+                                    Grid.Column="1"
+                                    Margin="3"
+                                    VerticalAlignment="Bottom"
+                                    pcontrols:Material.RelativeFontSizeRatio="1.0"
+                                    FontWeight="Light"
+                                    LineHeight="{Binding ElementName=Presenter, Path=ActualHeight}"
+                                    LineStackingStrategy="BlockLineHeight"
+                                    Text="{TemplateBinding Label}" />
                             </Grid>
                         </pcontrols:RippleEffectDecorator>
                     </Grid>

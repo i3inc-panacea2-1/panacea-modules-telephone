@@ -1,4 +1,5 @@
-﻿using Panacea.Core;
+﻿using Panacea.Controls;
+using Panacea.Core;
 using Panacea.Modularity.Billing;
 using Panacea.Modularity.Telephone;
 using Panacea.Modularity.UiManager;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Panacea.Modules.Telephone.ViewModels
 {
@@ -26,6 +28,37 @@ namespace Panacea.Modules.Telephone.ViewModels
         public TelephonePageViewModel(PanaceaServices core)
         {
             _core = core;
+            DialPadKeyPressCommand = new RelayCommand(args =>
+            {
+                var character = args.ToString();
+                if(int.TryParse(character, out int number))
+                {
+                    Number += number.ToString();
+                    if (Number.StartsWith("00"))
+                    {
+                        Number = "+" + Number.Substring(2, Number.Length - 2);
+                    }
+                }
+            });
+            DialPadBackspaceCommand = new RelayCommand(args =>
+            {
+                if(Number?.Length > 0)
+                {
+                    Number =  Number.Substring(0, Number.Length - 1);
+                }
+            },
+            args=> Number?.Length > 0);
+            DialPadAudioCallCommand = new RelayCommand(args =>
+            {
+
+            },
+            args => Number?.Length > 2);
+
+            DialPadVideoCallCommand = new RelayCommand(args =>
+            {
+
+            },
+            args => Number?.Length > 2);
         }
 
         private TelephoneAccount _terminalAccount, _userAccount;
@@ -91,6 +124,17 @@ namespace Panacea.Modules.Telephone.ViewModels
             set
             {
                 _availabilityEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _number;
+        public string Number
+        {
+            get => _number;
+            set
+            {
+                _number = value;
                 OnPropertyChanged();
             }
         }
@@ -221,5 +265,13 @@ namespace Panacea.Modules.Telephone.ViewModels
                 //todo ShowWindow();
             }
         }
+
+        public ICommand DialPadKeyPressCommand { get; }
+
+        public ICommand DialPadBackspaceCommand { get; set; }
+
+        public ICommand DialPadAudioCallCommand { get; }
+
+        public ICommand DialPadVideoCallCommand { get; set; }
     }
 }

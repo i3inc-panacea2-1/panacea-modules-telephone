@@ -634,10 +634,15 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
-                <lcontrols:DialPad />
+                <lcontrols:DialPad
+                    BackspaceCommand="{Binding DialPadBackspaceCommand}"
+                    KeyPressCommand="{Binding DialPadKeyPressCommand}"
+                    AudioCallCommand="{Binding DialPadAudioCallCommand}"
+                    VideoCallCommand="{Binding DialPadVideoCallCommand}"
+                    Number="{Binding Number}" />
             </Grid>
 
         </Grid>
-        <lcontrols:CallInProgressControl d:IsHidden="true" Visibility="Collapsed"/>
+        <lcontrols:CallInProgressControl d:IsHidden="true" Visibility="Collapsed" />
     </Grid>
 </UserControl>

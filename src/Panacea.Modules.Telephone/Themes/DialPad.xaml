@@ -15,7 +15,7 @@
                                 <Setter Property="VerticalContentAlignment" Value="Center" />
                                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                                 <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Padding" Value="2" />
+                                <Setter Property="Padding" Value="10" />
                                 <Setter Property="Foreground" Value="White" />
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -33,7 +33,11 @@
                                                         TextBlock.Foreground="{TemplateBinding Foreground}" />
                                                 </pcontrols:RippleEffectDecorator>
                                             </Border>
-
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value=".2"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -44,7 +48,7 @@
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="6*" />
                             </Grid.RowDefinitions>
-                            <Grid Visibility="{Binding ElementName=MainControl, Path=InputVisibility}">
+                            <Grid Visibility="{TemplateBinding InputVisibility}">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*" />
@@ -54,30 +58,17 @@
                                     <TextBlock
                                         Name="NumberText"
                                         Margin="15"
-                                        FontSize="{DynamicResource FontSize-Xxx-Huge}"
+                                        pcontrols:Material.RelativeFontSizeRatio="2.8"
                                         Foreground="White"
-                                        Text="{Binding ElementName=MainControl, Path=Number}" />
+                                        Text="{TemplateBinding Number}" />
                                 </Viewbox>
                                 <RepeatButton
                                     Grid.Column="1"
+                                    Command="{TemplateBinding BackspaceCommand}"
                                     Delay="500"
                                     Interval="100"
-                                    Style="{StaticResource Simple}"
-                                    Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
-                                    <Viewbox Margin="5,0" RenderTransformOrigin="0.5,0.5">
-                                        <Viewbox.RenderTransform>
-                                            <TransformGroup>
-                                                <RotateTransform Angle="180" />
-                                            </TransformGroup>
-                                        </Viewbox.RenderTransform>
-
-                                        <Path
-                                            Margin="5,0,5,0"
-                                            Data="F1 M 132.206,43.8841C 133.71,45.435 133.71,47.8984 132.206,49.4492L 90.8724,92.1159C 90.1198,92.8945 89.0833,93.3334 88,93.3334L 4,93.3334C 1.79041,93.3334 0,91.543 0,89.3334L 0,4.00002C 0,1.79042 1.79041,1.52588e-005 4,1.52588e-005L 88,1.52588e-005C 89.0833,1.52588e-005 90.1198,0.438828 90.8724,1.21745L 132.206,43.8841 Z M 86.3046,85.3334L 123.764,46.6667L 86.3046,8.00005L 7.99997,8.00005L 7.99997,85.3334L 86.3046,85.3334 Z M 68.862,17.1504L 76.4713,24.6283L 54.8105,46.6667L 76.4713,68.7071L 68.862,76.185L 47.3333,54.2774L 25.804,76.185L 18.196,68.7071L 39.8561,46.6667L 18.196,24.6283L 25.804,17.1504L 47.3333,39.0574L 68.862,17.1504 Z "
-                                            Fill="White"
-                                            Stretch="Uniform" />
-
-                                    </Viewbox>
+                                    Style="{StaticResource Simple}">
+                                    <pcontrols:MaterialIcon Icon="backspace" />
                                 </RepeatButton>
                             </Grid>
 

@@ -641,7 +641,6 @@
                     VideoCallCommand="{Binding DialPadVideoCallCommand}"
                     Number="{Binding Number}" />
             </Grid>
-
         </Grid>
         <lcontrols:CallInProgressControl d:IsHidden="true" Visibility="Collapsed" />
     </Grid>

@@ -1,0 +1,643 @@
+﻿<UserControl
+    x:Class="Panacea.Modules.Telephone.Views.TelephonePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lcontrols="clr-namespace:Panacea.Modules.Telephone.Controls"
+    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
+    controls:Material.RelativeFontSizeRatio="1.0"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="White"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="TabControlWithoutHeaders" TargetType="TabControl">
+            <Style.Setters>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="{x:Type TabItem}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+
+        </Style>
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Background" Value="#FAFAFB" />
+            <Setter Property="BorderBrush" Value="#EAEAEB" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Viewbox Stretch="Uniform">
+                            <Canvas
+                                Name="Layer_1"
+                                Width="40"
+                                Height="20">
+                                <Ellipse
+                                    Canvas.Left="0"
+                                    Width="20"
+                                    Height="20"
+                                    Fill="{TemplateBinding Background}"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="0.5" />
+                                <Ellipse
+                                    Canvas.Left="15"
+                                    Width="20"
+                                    Height="20"
+                                    Fill="{TemplateBinding Background}"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="0.5" />
+                                <Border
+                                    Name="rect416927"
+                                    Canvas.Left="10"
+                                    Width="15"
+                                    Height="20"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="0,0.5,0,0.5" />
+                                <Ellipse
+                                    x:Name="ellipse"
+                                    Canvas.Left="0"
+                                    Width="20"
+                                    Height="20"
+                                    Fill="White"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="0.3">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform X="0" Y="0" />
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect
+                                            Direction="270"
+                                            Opacity="0.1"
+                                            ShadowDepth="0.7"
+                                            Color="#BBBBBB" />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Canvas>
+                        </Viewbox>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="Background.Color"
+                                                To="Green"
+                                                Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="BorderBrush.Color"
+                                                To="DarkGreen"
+                                                Duration="0:0:0.2" />
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)">
+                                                <SplineDoubleKeyFrame KeyTime="0" Value="0" />
+                                                <SplineDoubleKeyFrame
+                                                    KeySpline="0, 1, 0.6, 1"
+                                                    KeyTime="0:0:0.4"
+                                                    Value="15" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="Background.Color"
+                                                To="#FAFAFB"
+                                                Duration="0:0:0.2" />
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="BorderBrush.Color"
+                                                To="#EAEAEB"
+                                                Duration="0:0:0.2" />
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)">
+                                                <SplineDoubleKeyFrame KeyTime="0" Value="15" />
+                                                <SplineDoubleKeyFrame
+                                                    KeySpline="0, 0.5, 0.5, 1"
+                                                    KeyTime="0:0:0.3"
+                                                    Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TabControl}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border
+                                Grid.Row="1"
+                                Background="#f1f1f1"
+                                BorderBrush="#cccccc"
+                                BorderThickness="0,0,0,0">
+                                <UniformGrid
+                                    Name="HeaderPanel"
+                                    Margin="0"
+                                    HorizontalAlignment="Stretch"
+                                    Panel.ZIndex="1"
+                                    IsItemsHost="True"
+                                    KeyboardNavigation.TabIndex="1"
+                                    Rows="1" />
+                            </Border>
+                            <Border
+                                Name="Border"
+                                Grid.Row="0"
+                                Background="White"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="2"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2"
+                                KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter
+                                    Name="PART_SelectedContentHost"
+                                    Margin="4"
+                                    ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="FontSize" Value="{DynamicResource FontSize-Normal}" />
+            <Setter Property="Template">
+
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid Name="Panel" HorizontalAlignment="Stretch">
+                            <Border
+                                Name="border"
+                                BorderBrush="#cccccc"
+                                BorderThickness="0" />
+                            <ContentPresenter
+                                x:Name="ContentSite"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Header" />
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="White" />
+                                <Setter TargetName="border" Property="Background" Value="white" />
+                                <Setter Property="Foreground" Value="#222222" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="#e7e7e7" />
+                                <Setter Property="Foreground" Value="#bb000000" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="0,1,0,0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid VerticalAlignment="Stretch">
+        <Grid VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="#888888" BorderThickness="0,0,1,0">
+                <Grid Name="left" Background="#fafafa">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <TabControl Margin="8" Style="{StaticResource TabControlWithoutHeaders}">
+                            <TabItem>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        Foreground="#999999"
+                                        Text="{multilinguality:Translate 'Your telephone number is',
+                                                                         'Telephone'}"
+                                        Visibility="{Binding ElementName=CurrentNumber, Path=Visibility}" />
+                                    <TextBlock
+                                        Name="CurrentNumber"
+                                        HorizontalAlignment="Left"
+                                        controls:Material.RelativeFontSizeRatio="1.6"
+                                        Foreground="#777777"
+                                        Text="{multilinguality:Translate 'No service',
+                                                                         'Telephone'}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="#999999"
+                                        Text="{Binding Settings.HelpText}"
+                                        TextWrapping="Wrap"
+                                        Visibility="Collapsed" />
+                                </StackPanel>
+                            </TabItem>
+                            <TabItem>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        controls:Material.RelativeFontSizeRatio="1.6"
+                                        Foreground="#777777"
+                                        Text="{multilinguality:Translate 'No service',
+                                                                         'Telephone'}"
+                                        TextWrapping="Wrap" />
+
+                                </StackPanel>
+
+                            </TabItem>
+                        </TabControl>
+                        <TabControl Margin="8" Style="{StaticResource TabControlWithoutHeaders}">
+                            <TabItem>
+                                <TextBlock
+                                    Name="BuyServicesAndSignInBlock"
+                                    HorizontalAlignment="Left"
+                                    controls:Material.RelativeFontSizeRatio=".9"
+                                    Foreground="#999999"
+                                    TextWrapping="Wrap">
+                                    <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
+                                    <Hyperlink>
+                                        <TextBlock Text="{multilinguality:Translate 'Buy Services', 'Telephone'}" />
+                                    </Hyperlink>
+                                    <Run Text="{multilinguality:Translate 'or', 'Telephone'}" />
+                                    <Hyperlink>
+                                        <TextBlock Text="{multilinguality:Translate 'Sign in', 'Telephone'}" />
+                                    </Hyperlink>
+                                </TextBlock>
+                            </TabItem>
+                            <TabItem>
+                                <TextBlock
+                                    Name="BuyServiceBlock"
+                                    HorizontalAlignment="Left"
+                                    controls:Material.RelativeFontSizeRatio=".9"
+                                    Foreground="#999999"
+                                    TextWrapping="Wrap">
+                                    <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
+                                    <Hyperlink>
+                                        <TextBlock Text="{multilinguality:Translate 'Buy Services', 'Telephone'}" />
+                                    </Hyperlink>
+
+                                </TextBlock>
+                            </TabItem>
+                            <TabItem>
+                                <TextBlock
+                                    Name="SignInBlock"
+                                    HorizontalAlignment="Left"
+                                    controls:Material.RelativeFontSizeRatio=".9"
+                                    Foreground="#999999"
+                                    TextWrapping="Wrap">
+                                    <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
+                                    <Hyperlink>
+                                        <TextBlock Text="{multilinguality:Translate 'Sign in', 'Telephone'}" />
+                                    </Hyperlink>
+                                </TextBlock>
+                            </TabItem>
+                        </TabControl>
+                        <Border Height="1" Background="#cccccc" />
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Margin="0,0,60,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                controls:Material.RelativeFontSizeRatio="1.1"
+                                Foreground="#777777"
+                                Text="{multilinguality:Translate 'Availability',
+                                                                 'Telephone'}" />
+                            <ToggleButton
+                                Name="BusyButton"
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                controls:Material.RelativeFontSizeRatio="1.1"
+                                Foreground="#555555"
+                                IsChecked="True" />
+                        </Grid>
+                        <Border Height="1" Background="#cccccc" />
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Name="nocalllog"
+                            Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            controls:Material.RelativeFontSizeRatio="1.1"
+                            Foreground="#777777"
+                            Text="{multilinguality:Translate 'No items',
+                                                             'Telephone'}" />
+                        <TabControl Name="Tabs" Grid.Row="1">
+
+                            <TabItem Header="Speed Dials">
+                                <ScrollViewer
+                                    Grid.Row="0"
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Stretch"
+                                    Background="#fdfdfd"
+                                    PanningMode="VerticalOnly"
+                                    VerticalScrollBarVisibility="Hidden">
+                                    <ItemsControl Name="HospitalDials">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button
+                                                    Margin="0"
+                                                    Padding="0"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    Background="White"
+                                                    Tag="{Binding}">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="1*" />
+                                                            <ColumnDefinition Width="5*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid Grid.RowSpan="2">
+                                                            <controls:CacheImage ImageUrl="{Binding Image.Image}" />
+                                                        </Grid>
+
+                                                        <TextBlock
+                                                            Grid.Row="0"
+                                                            Grid.Column="1"
+                                                            Margin="6,3"
+                                                            VerticalAlignment="Bottom"
+                                                            controls:Material.RelativeFontSizeRatio="1.2"
+                                                            Text="{Binding Label}" />
+                                                        <TextBlock
+                                                            Grid.Row="1"
+                                                            Grid.Column="1"
+                                                            Margin="6,3"
+                                                            VerticalAlignment="Top"
+                                                            controls:Material.RelativeFontSizeRatio="1.2"
+                                                            Foreground="#777777"
+                                                            Text="{Binding Description}"
+                                                            TextTrimming="CharacterEllipsis" />
+                                                        <Border
+                                                            Grid.Row="2"
+                                                            Grid.Column="0"
+                                                            Grid.ColumnSpan="2"
+                                                            Margin="4,0"
+                                                            Background="#ffffff"
+                                                            BorderBrush="#f8f8f8"
+                                                            BorderThickness="0,0,0,1" />
+                                                    </Grid>
+                                                </Button>
+
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem Name="ContactsTab" Header="Contacts">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer
+                                        Margin="0,10,0,0"
+                                        VerticalAlignment="Stretch"
+                                        PanningMode="VerticalOnly"
+                                        VerticalScrollBarVisibility="Hidden">
+                                        <ItemsControl Name="UserDials">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button
+                                                        Name="nurse"
+                                                        Margin="3"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Tag="{Binding}">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition />
+                                                                <RowDefinition />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock
+                                                                Grid.Row="0"
+                                                                Margin="6,3"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Bottom"
+                                                                controls:Material.RelativeFontSizeRatio="1.1"
+                                                                Text="{Binding Label}" />
+                                                            <TextBlock
+                                                                Grid.Row="1"
+                                                                Margin="6,3"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Top"
+                                                                controls:Material.RelativeFontSizeRatio="1.1"
+                                                                Foreground="#777777"
+                                                                Text="{Binding Number}"
+                                                                TextTrimming="CharacterEllipsis" />
+                                                            <Border
+                                                                Grid.Row="2"
+                                                                Grid.Column="0"
+                                                                Grid.ColumnSpan="2"
+                                                                Margin="4,0"
+                                                                Background="#ffffff"
+                                                                BorderBrush="#f8f8f8"
+                                                                BorderThickness="0,0,0,1" />
+                                                        </Grid>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    <Button
+                                        Name="addSpeedDial"
+                                        Grid.Row="1"
+                                        VerticalAlignment="Bottom"
+                                        Background="{DynamicResource ColorInformation}"
+                                        Content="{multilinguality:Translate 'Manage your contacts',
+                                                                            'Telephone'}" />
+                                </Grid>
+
+                            </TabItem>
+                            <TabItem Name="CallHistoryTab" Header="Call History">
+                                <ScrollViewer
+                                    VerticalAlignment="Stretch"
+                                    PanningMode="VerticalOnly"
+                                    VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding ElementName=main, Path=CallHistory}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#55ffffff" BorderThickness="0,0,0,1">
+                                                    <Grid Margin="0,1,0,0">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="10*" />
+                                                                <ColumnDefinition Width="42*" />
+                                                                <ColumnDefinition Width="30*" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="1*" />
+                                                                    <RowDefinition Height="1.7*" />
+                                                                    <RowDefinition Height="1*" />
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="1*" />
+                                                                    <ColumnDefinition Width="1.7*" />
+                                                                    <ColumnDefinition Width="1*" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <Viewbox
+                                                                    Grid.Row="1"
+                                                                    Grid.Column="1"
+                                                                    RenderTransformOrigin=".5,.5">
+                                                                    <Viewbox.RenderTransform>
+                                                                        <RotateTransform Angle="{Binding Rotation}" />
+                                                                    </Viewbox.RenderTransform>
+                                                                    <Path
+                                                                        Name="PathIcon"
+                                                                        Margin="3"
+                                                                        VerticalAlignment="Center"
+                                                                        Data="F1 M 0,10.7852L 14.0247,21.5698L 14.0247,14.7494L 26.8469,14.7494L 26.8469,6.82025L 14.0247,6.82025L 14.0247,0L 0,10.7852 Z "
+                                                                        Fill="{Binding ColorBrush}" />
+                                                                </Viewbox>
+                                                            </Grid>
+                                                            <Button
+                                                                Name="SpeedDialButton"
+                                                                Grid.Row="0"
+                                                                Grid.Column="1"
+                                                                HorizontalContentAlignment="Left"
+                                                                Background="Transparent"
+                                                                Style="{DynamicResource stylessWithBackground}"
+                                                                Tag="{Binding}">
+                                                                <TextBlock
+                                                                    Margin="10"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    controls:Material.RelativeFontSizeRatio="1.5"
+                                                                    Foreground="#222222"
+                                                                    Text="{Binding Display}" />
+                                                            </Button>
+                                                            <Grid Grid.Row="0" Grid.Column="2">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="3*" />
+                                                                    <RowDefinition Height="2.2*" />
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock
+                                                                    Name="time"
+                                                                    Margin="2"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Bottom"
+                                                                    controls:Material.RelativeFontSizeRatio="1.1"
+                                                                    Foreground="#222222"
+                                                                    Text="{Binding TimeStamp, StringFormat=g}" />
+                                                                <TextBlock
+                                                                    Name="duration"
+                                                                    Grid.Row="1"
+                                                                    Margin="2"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Top"
+                                                                    controls:Material.RelativeFontSizeRatio=".9"
+                                                                    Foreground="#222222"
+                                                                    Opacity="0.8"
+                                                                    Text="{Binding Duration, StringFormat=hh\':\'mm\':\'ss}" />
+                                                            </Grid>
+                                                            <Border
+                                                                Grid.Row="0"
+                                                                Grid.Column="3"
+                                                                Margin="2,6"
+                                                                BorderBrush="#000000"
+                                                                BorderThickness="0,0,1,0"
+                                                                Opacity="0.1" />
+                                                            <Button
+                                                                Name="remove"
+                                                                Grid.Row="0"
+                                                                Grid.Column="4"
+                                                                Style="{DynamicResource styless}"
+                                                                Tag="{Binding}">
+                                                                <TextBlock
+                                                                    Padding="20"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    controls:Material.RelativeFontSizeRatio="1.1"
+                                                                    Foreground="#222222"
+                                                                    Text="X" />
+                                                            </Button>
+                                                            <Border
+                                                                Grid.Row="1"
+                                                                Grid.ColumnSpan="5"
+                                                                BorderBrush="#eee"
+                                                                BorderThickness="0,1,0,0" />
+                                                        </Grid>
+
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </TabItem>
+                        </TabControl>
+
+                    </Grid>
+
+
+                </Grid>
+            </Border>
+            <Grid
+                Name="middle"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <lcontrols:DialPad />
+            </Grid>
+
+        </Grid>
+        <lcontrols:CallInProgressControl d:IsHidden="true" Visibility="Collapsed"/>
+    </Grid>
+</UserControl>

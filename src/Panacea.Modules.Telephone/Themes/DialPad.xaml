@@ -35,7 +35,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="Opacity" Value=".2"/>
+                                                    <Setter Property="Opacity" Value=".2" />
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -145,6 +145,7 @@
                                 <Button
                                     Margin="10"
                                     Command="{TemplateBinding AudioCallCommand}"
+                                    CommandParameter="{TemplateBinding Number}"
                                     Style="{StaticResource Simple}"
                                     Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
                                     <pcontrols:MaterialIcon Icon="call" />
@@ -155,6 +156,7 @@
                                 <Button
                                     Margin="10"
                                     Command="{TemplateBinding VideoCallCommand}"
+                                    CommandParameter="{TemplateBinding Number}"
                                     Style="{StaticResource Simple}"
                                     Visibility="{Binding ElementName=MainControl, Path=ButtonVisibility}">
                                     <pcontrols:MaterialIcon Icon="videocam" />

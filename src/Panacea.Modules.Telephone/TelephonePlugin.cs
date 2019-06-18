@@ -14,11 +14,12 @@ using System.Threading.Tasks;
 
 namespace Panacea.Modules.Telephone
 {
-    class TelephonePlugin : ICallablePlugin
+    class TelephonePlugin : ITelephonePlugin, ICallablePlugin
     {
         private readonly PanaceaServices _core;
         GetVoipSettingsResponse _settings;
         TelephonePageViewModel _telephonePage;
+        Translator _translator = new Translator("Telephone");
         public TelephonePlugin(PanaceaServices core)
         {
             _core = core;
@@ -39,10 +40,10 @@ namespace Panacea.Modules.Telephone
             return Task.CompletedTask;
         }
 
-        public async Task EndInit()
+        public Task EndInit()
         {
-            _telephonePage = new TelephonePageViewModel(_core);
-            await GetSettingsAsync();
+            _ = GetSettingsAsync();
+            return Task.CompletedTask;
         }
 
         private async Task GetSettingsAsync()
@@ -55,24 +56,42 @@ namespace Panacea.Modules.Telephone
                     _core.Logger.Debug(this, "Failed to get voip settings: " + (settingsResponse.Error));
                     return;
                 }
-
+                
                 _settings = settingsResponse.Result;
+                _telephonePage = _telephonePage ?? new TelephonePageViewModel(_core, _settings);
+                _telephonePage.Settings = _settings;
+
+                _telephonePage.TerminalSpeedDials = _settings.Categories.Telephone.SpeedDialCategories.SelectMany(s => s.SpeedDials.Select(sd=>sd.SpeedDial)).ToList();
                 _telephonePage.TerminalAccount = _settings.TerminalAccount;
                 _telephonePage.UserAccount = _settings.UserAccount;
-
             }
             catch (Exception ex)
             {
                 _core.Logger.Error(this, "Telephone failed to get settings: " + ex.Message);
+                await Task.Delay(new Random().Next(20000, 40000));
+                await GetSettingsAsync();
             }
         }
 
         public void Call()
         {
+            
             if(_core.TryGetUiManager(out IUiManager ui))
             {
-                ui.Navigate(_telephonePage);
+                if (_telephonePage != null)
+                {
+                    ui.Navigate(_telephonePage);
+                }
+                else
+                {
+                    ui.Toast(_translator.Translate("Telephone is not yet available. Please, try again shortly"));
+                }
             }
+        }
+
+        public void Call(string number)
+        {
+            throw new NotImplementedException();
         }
     }
 }

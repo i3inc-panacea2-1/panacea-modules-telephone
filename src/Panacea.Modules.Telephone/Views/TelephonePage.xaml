@@ -14,6 +14,7 @@
     Background="White"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <Style x:Key="TabControlWithoutHeaders" TargetType="TabControl">
             <Style.Setters>
                 <Setter Property="Background" Value="Transparent" />
@@ -225,7 +226,7 @@
         <Grid VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*" />
-                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
             <Border BorderBrush="#888888" BorderThickness="0,0,1,0">
                 <Grid Name="left" Background="#fafafa">
@@ -234,7 +235,23 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <TabControl Margin="8" Style="{StaticResource TabControlWithoutHeaders}">
+                        <TabControl
+                            Margin="8,8,8,0"
+                            SelectedIndex="{Binding CurrentNumberSelectedIndex}"
+                            Style="{StaticResource TabControlWithoutHeaders}">
+                            <TabItem>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        controls:Material.RelativeFontSizeRatio="2.2"
+                                        Foreground="#777777"
+                                        Text="{multilinguality:Translate 'No service',
+                                                                         'Telephone'}"
+                                        TextWrapping="Wrap" />
+
+                                </StackPanel>
+
+                            </TabItem>
                             <TabItem>
                                 <StackPanel>
                                     <TextBlock
@@ -246,35 +263,24 @@
                                     <TextBlock
                                         Name="CurrentNumber"
                                         HorizontalAlignment="Left"
-                                        controls:Material.RelativeFontSizeRatio="1.6"
+                                        controls:Material.RelativeFontSizeRatio="2.2"
                                         Foreground="#777777"
-                                        Text="{multilinguality:Translate 'No service',
-                                                                         'Telephone'}"
+                                        Text="{Binding CurrentNumber}"
                                         TextWrapping="Wrap" />
                                     <TextBlock
                                         HorizontalAlignment="Left"
                                         controls:Material.RelativeFontSizeRatio="1.1"
                                         Foreground="#999999"
-                                        Text="{Binding Settings.HelpText}"
-                                        TextWrapping="Wrap"
-                                        Visibility="Collapsed" />
-                                </StackPanel>
-                            </TabItem>
-                            <TabItem>
-                                <StackPanel>
-                                    <TextBlock
-                                        HorizontalAlignment="Left"
-                                        controls:Material.RelativeFontSizeRatio="1.6"
-                                        Foreground="#777777"
-                                        Text="{multilinguality:Translate 'No service',
-                                                                         'Telephone'}"
+                                        Text="{Binding Settings.Settings.HelpText}"
                                         TextWrapping="Wrap" />
-
                                 </StackPanel>
-
                             </TabItem>
+
                         </TabControl>
-                        <TabControl Margin="8" Style="{StaticResource TabControlWithoutHeaders}">
+                        <TabControl
+                            Margin="8,0,8,8"
+                            SelectedIndex="{Binding CurrentServiceSelectedIndex}"
+                            Style="{StaticResource TabControlWithoutHeaders}">
                             <TabItem>
                                 <TextBlock
                                     Name="BuyServicesAndSignInBlock"
@@ -319,6 +325,7 @@
                                     </Hyperlink>
                                 </TextBlock>
                             </TabItem>
+                            <TabItem />
                         </TabControl>
                         <Border Height="1" Background="#cccccc" />
                         <Grid Margin="10">
@@ -335,12 +342,11 @@
                                 Text="{multilinguality:Translate 'Availability',
                                                                  'Telephone'}" />
                             <ToggleButton
-                                Name="BusyButton"
                                 Grid.Column="1"
                                 HorizontalAlignment="Stretch"
                                 controls:Material.RelativeFontSizeRatio="1.1"
                                 Foreground="#555555"
-                                IsChecked="True" />
+                                IsChecked="{Binding AvailabilityEnabled}" />
                         </Grid>
                         <Border Height="1" Background="#cccccc" />
                     </StackPanel>
@@ -367,7 +373,7 @@
                                     Background="#fdfdfd"
                                     PanningMode="VerticalOnly"
                                     VerticalScrollBarVisibility="Hidden">
-                                    <ItemsControl Name="HospitalDials">
+                                    <ItemsControl Name="HospitalDials" ItemsSource="{Binding TerminalSpeedDials}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel />
@@ -381,7 +387,9 @@
                                                     HorizontalAlignment="Stretch"
                                                     HorizontalContentAlignment="Stretch"
                                                     Background="White"
-                                                    Tag="{Binding}">
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
+                                                    CommandParameter="{Binding Number}"
+                                                    Visibility="{Binding Visible, Converter={StaticResource BoolToVis}}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition />
@@ -399,16 +407,16 @@
                                                         <TextBlock
                                                             Grid.Row="0"
                                                             Grid.Column="1"
-                                                            Margin="6,3"
+                                                            Margin="15,6,3,6"
                                                             VerticalAlignment="Bottom"
-                                                            controls:Material.RelativeFontSizeRatio="1.2"
+                                                            controls:Material.RelativeFontSizeRatio="1.6"
                                                             Text="{Binding Label}" />
                                                         <TextBlock
                                                             Grid.Row="1"
                                                             Grid.Column="1"
-                                                            Margin="6,3"
+                                                            Margin="15,6,3,6"
                                                             VerticalAlignment="Top"
-                                                            controls:Material.RelativeFontSizeRatio="1.2"
+                                                            controls:Material.RelativeFontSizeRatio="1.1"
                                                             Foreground="#777777"
                                                             Text="{Binding Description}"
                                                             TextTrimming="CharacterEllipsis" />
@@ -635,13 +643,18 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 <lcontrols:DialPad
+                    AudioCallCommand="{Binding DialPadAudioCallCommand}"
                     BackspaceCommand="{Binding DialPadBackspaceCommand}"
                     KeyPressCommand="{Binding DialPadKeyPressCommand}"
-                    AudioCallCommand="{Binding DialPadAudioCallCommand}"
-                    VideoCallCommand="{Binding DialPadVideoCallCommand}"
-                    Number="{Binding Number}" />
+                    Number="{Binding Number}"
+                    VideoCallCommand="{Binding DialPadVideoCallCommand}" />
             </Grid>
         </Grid>
-        <lcontrols:CallInProgressControl d:IsHidden="true" Visibility="Collapsed" />
+        <lcontrols:CallInProgressControl
+            d:IsHidden="true"
+            CurrentNumber="{Binding Number}"
+            HangUpCommand="{Binding HangUpCommand}"
+            StatusText="{Binding StatusText}"
+            Visibility="{Binding CallInProgress, Converter={StaticResource BoolToVis}}" />
     </Grid>
 </UserControl>

@@ -1,12 +1,19 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Controls"
+    xmlns:controls="clr-namespace:Panacea.Controls;assembly=Panacea.Controls">
     <Style TargetType="local:CallInProgressControl">
         <Style.Setters>
+            <Setter Property="Background" Value="#222222"/>
+            
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
-                        <Grid>
+                    <ControlTemplate TargetType="local:CallInProgressControl" >
+                        <ControlTemplate.Resources>
+                            <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+                        </ControlTemplate.Resources>
+                        <Grid Background="{TemplateBinding Background}" controls:Material.RelativeFontSizeRatio="1.0">
                             <Viewbox Stretch="Fill">
                                 <Grid Name="VideoRemoteHost" />
                             </Viewbox>
@@ -24,21 +31,21 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Border
-                Name="VideoHost"
-                Grid.Row="2"
-                Grid.Column="2"
-                Margin="5"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Bottom"
-                Background="#22000000"
-                BorderBrush="Black"
-                BorderThickness="0">
+                                    Name="VideoHost"
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    Background="#22000000"
+                                    BorderBrush="Black"
+                                    BorderThickness="0">
                                     <Border.Effect>
                                         <DropShadowEffect
-                        BlurRadius="10"
-                        Direction="0"
-                        Opacity="0.5"
-                        ShadowDepth="0" />
+                                            BlurRadius="10"
+                                            Direction="0"
+                                            Opacity="0.5"
+                                            ShadowDepth="0" />
                                     </Border.Effect>
 
                                 </Border>
@@ -55,20 +62,20 @@
                                         <RowDefinition Height="8*" />
                                     </Grid.RowDefinitions>
                                     <TextBlock
-                    Name="NumberText"
-                    Padding="5"
-                    Background="#77000000"
-                    FontSize="{DynamicResource FontSize-Xx-Large}"
-                    Foreground="White"
-                    TextAlignment="Center" />
+                                        Text="{TemplateBinding CurrentNumber}"
+                                        Padding="5"
+                                        Background="#77000000"
+                                        controls:Material.RelativeFontSizeRatio="1.8"
+                                        Foreground="White"
+                                        TextAlignment="Center" />
                                     <TextBlock
-                    Name="StatusText"
-                    Grid.Row="1"
-                    Padding="2"
-                    Background="#77559CDC"
-                    FontSize="{DynamicResource FontSize-Normal}"
-                    Foreground="White"
-                    TextAlignment="Center" />
+                                        Text="{TemplateBinding StatusText}"
+                                        controls:Material.RelativeFontSizeRatio="1.3"
+                                        Grid.Row="1"
+                                        Padding="2"
+                                        Background="#77559CDC"
+                                        Foreground="White"
+                                        TextAlignment="Center" />
                                     <Grid Grid.Row="2">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -76,38 +83,39 @@
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
                                         <Viewbox
-                        Name="Dial"
-                        Grid.Column="1"
-                        Margin="0,10,0,10"
-                        Visibility="Visible">
+                                            Name="Dial"
+                                            Grid.Column="1"
+                                            Margin="0,10,0,10"
+                                            Visibility="Visible">
                                             <local:DialPad
-                            x:Name="DialerControl"
-                            Width="700"
-                            Height="900"
-                            InputVisibility="Visible">
+                                                x:Name="DialerControl"
+                                                Width="700"
+                                                Height="900"
+                                                InputVisibility="Collapsed"
+                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CallInProgressControl}, Path=DialPadVisibile, Converter={StaticResource BoolToVis}}">
                                                 <local:DialPad.Effect>
                                                     <DropShadowEffect
-                                    BlurRadius="5"
-                                    Direction="0"
-                                    Opacity=".5"
-                                    ShadowDepth="0" />
+                                                        BlurRadius="5"
+                                                        Direction="0"
+                                                        Opacity=".5"
+                                                        ShadowDepth="0" />
                                                 </local:DialPad.Effect>
                                             </local:DialPad>
                                         </Viewbox>
                                     </Grid>
                                 </Grid>
                                 <StackPanel
-                Grid.Row="1"
-                HorizontalAlignment="Center"
-                Orientation="Horizontal">
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
                                     <Button
-                    Name="AnswerButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorSuccess}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Name="AnswerButton"
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorSuccess}"
+                                        controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
                                             <Viewbox.RenderTransform>
                                                 <TransformGroup>
@@ -115,37 +123,37 @@
                                                 </TransformGroup>
                                             </Viewbox.RenderTransform>
                                             <Path
-                            Margin="10,0"
-                            Data="F1 M 0.292511,15.8775C 0.0825195,15.5875 -0.0149841,15.365 0,15.21C 0.0150146,15.055 0.0300293,14.8325 0.0449829,14.5425C 0.0599976,14.2525 0.173737,13.9788 0.386261,13.7213C 0.598755,13.4637 0.88501,13.195 1.245,12.915C 1.85001,12.43 2.37625,12.0862 2.82376,11.8837C 3.27127,11.6813 3.67752,11.65 4.04251,11.79C 4.4075,11.93 4.66873,12.0625 4.82623,12.1875C 4.98376,12.3125 5.27249,12.6025 5.6925,13.0575C 6.36749,13.7275 7.91998,12.8325 10.35,10.3725C 12.78,7.91248 13.6725,6.36249 13.0275,5.72247C 12.2625,4.95251 11.835,4.3725 11.745,3.98248C 11.62,3.3125 12.0025,2.40002 12.8925,1.245C 13.1725,0.88501 13.4525,0.595032 13.7325,0.375C 14.0125,0.154968 14.2862,0.0374756 14.5537,0.022522C 14.8213,0.00750732 15.045,0 15.225,0C 15.405,0 15.6313,0.0974731 15.9038,0.29248C 16.1762,0.487488 16.3587,0.623718 16.4513,0.701233C 16.5437,0.778748 16.735,0.969971 17.025,1.27502C 17.315,1.58002 17.475,1.75 17.505,1.78497C 18.24,2.51501 18.1938,3.96625 17.3662,6.13873C 16.5388,8.31122 15.0038,10.5187 12.7613,12.7612C 10.5187,15.0037 8.3075,16.535 6.1275,17.355C 3.94751,18.175 2.49002,18.21 1.755,17.46L 1.28998,17.04C 0.975006,16.725 0.782501,16.525 0.712524,16.44C 0.642487,16.355 0.502502,16.1675 0.292511,15.8775 Z "
-                            Fill="White"
-                            Stretch="Uniform"
-                            UseLayoutRounding="False" />
+                                                Margin="10,0"
+                                                Data="F1 M 0.292511,15.8775C 0.0825195,15.5875 -0.0149841,15.365 0,15.21C 0.0150146,15.055 0.0300293,14.8325 0.0449829,14.5425C 0.0599976,14.2525 0.173737,13.9788 0.386261,13.7213C 0.598755,13.4637 0.88501,13.195 1.245,12.915C 1.85001,12.43 2.37625,12.0862 2.82376,11.8837C 3.27127,11.6813 3.67752,11.65 4.04251,11.79C 4.4075,11.93 4.66873,12.0625 4.82623,12.1875C 4.98376,12.3125 5.27249,12.6025 5.6925,13.0575C 6.36749,13.7275 7.91998,12.8325 10.35,10.3725C 12.78,7.91248 13.6725,6.36249 13.0275,5.72247C 12.2625,4.95251 11.835,4.3725 11.745,3.98248C 11.62,3.3125 12.0025,2.40002 12.8925,1.245C 13.1725,0.88501 13.4525,0.595032 13.7325,0.375C 14.0125,0.154968 14.2862,0.0374756 14.5537,0.022522C 14.8213,0.00750732 15.045,0 15.225,0C 15.405,0 15.6313,0.0974731 15.9038,0.29248C 16.1762,0.487488 16.3587,0.623718 16.4513,0.701233C 16.5437,0.778748 16.735,0.969971 17.025,1.27502C 17.315,1.58002 17.475,1.75 17.505,1.78497C 18.24,2.51501 18.1938,3.96625 17.3662,6.13873C 16.5388,8.31122 15.0038,10.5187 12.7613,12.7612C 10.5187,15.0037 8.3075,16.535 6.1275,17.355C 3.94751,18.175 2.49002,18.21 1.755,17.46L 1.28998,17.04C 0.975006,16.725 0.782501,16.525 0.712524,16.44C 0.642487,16.355 0.502502,16.1675 0.292511,15.8775 Z "
+                                                Fill="White"
+                                                Stretch="Uniform"
+                                                UseLayoutRounding="False" />
                                         </Viewbox>
                                     </Button>
                                     <Button
-                    Name="AnswerVideoButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorSuccess}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Name="AnswerVideoButton"
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorSuccess}"
+                                        controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
                                             <Path
-                            Margin="3"
-                            Data="F1 M 28.4657,7.12985L 38.0057,1.05301L 38.0057,18.0873L 28.4657,12.0105L 28.4657,7.12985 Z M 0,19.14L 26.2096,19.14L 26.2096,-3.05176e-005L 0,-3.05176e-005L 0,19.14 Z "
-                            Fill="White"
-                            Stretch="Uniform" />
+                                                Margin="3"
+                                                Data="F1 M 28.4657,7.12985L 38.0057,1.05301L 38.0057,18.0873L 28.4657,12.0105L 28.4657,7.12985 Z M 0,19.14L 26.2096,19.14L 26.2096,-3.05176e-005L 0,-3.05176e-005L 0,19.14 Z "
+                                                Fill="White"
+                                                Stretch="Uniform" />
                                         </Viewbox>
                                     </Button>
                                     <Button
-                    Name="HungupButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorError}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorError}"
+                                         controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White"
+                                        Command="{TemplateBinding HangUpCommand}">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
                                             <Viewbox.RenderTransform>
                                                 <TransformGroup>
@@ -153,21 +161,21 @@
                                                 </TransformGroup>
                                             </Viewbox.RenderTransform>
                                             <Path
-                            Margin="10,0"
-                            Data="F1 M 0.292511,15.8775C 0.0825195,15.5875 -0.0149841,15.365 0,15.21C 0.0150146,15.055 0.0300293,14.8325 0.0449829,14.5425C 0.0599976,14.2525 0.173737,13.9788 0.386261,13.7213C 0.598755,13.4637 0.88501,13.195 1.245,12.915C 1.85001,12.43 2.37625,12.0862 2.82376,11.8837C 3.27127,11.6813 3.67752,11.65 4.04251,11.79C 4.4075,11.93 4.66873,12.0625 4.82623,12.1875C 4.98376,12.3125 5.27249,12.6025 5.6925,13.0575C 6.36749,13.7275 7.91998,12.8325 10.35,10.3725C 12.78,7.91248 13.6725,6.36249 13.0275,5.72247C 12.2625,4.95251 11.835,4.3725 11.745,3.98248C 11.62,3.3125 12.0025,2.40002 12.8925,1.245C 13.1725,0.88501 13.4525,0.595032 13.7325,0.375C 14.0125,0.154968 14.2862,0.0374756 14.5537,0.022522C 14.8213,0.00750732 15.045,0 15.225,0C 15.405,0 15.6313,0.0974731 15.9038,0.29248C 16.1762,0.487488 16.3587,0.623718 16.4513,0.701233C 16.5437,0.778748 16.735,0.969971 17.025,1.27502C 17.315,1.58002 17.475,1.75 17.505,1.78497C 18.24,2.51501 18.1938,3.96625 17.3662,6.13873C 16.5388,8.31122 15.0038,10.5187 12.7613,12.7612C 10.5187,15.0037 8.3075,16.535 6.1275,17.355C 3.94751,18.175 2.49002,18.21 1.755,17.46L 1.28998,17.04C 0.975006,16.725 0.782501,16.525 0.712524,16.44C 0.642487,16.355 0.502502,16.1675 0.292511,15.8775 Z "
-                            Fill="White"
-                            Stretch="Uniform"
-                            UseLayoutRounding="False" />
+                                                Margin="10,0"
+                                                Data="F1 M 0.292511,15.8775C 0.0825195,15.5875 -0.0149841,15.365 0,15.21C 0.0150146,15.055 0.0300293,14.8325 0.0449829,14.5425C 0.0599976,14.2525 0.173737,13.9788 0.386261,13.7213C 0.598755,13.4637 0.88501,13.195 1.245,12.915C 1.85001,12.43 2.37625,12.0862 2.82376,11.8837C 3.27127,11.6813 3.67752,11.65 4.04251,11.79C 4.4075,11.93 4.66873,12.0625 4.82623,12.1875C 4.98376,12.3125 5.27249,12.6025 5.6925,13.0575C 6.36749,13.7275 7.91998,12.8325 10.35,10.3725C 12.78,7.91248 13.6725,6.36249 13.0275,5.72247C 12.2625,4.95251 11.835,4.3725 11.745,3.98248C 11.62,3.3125 12.0025,2.40002 12.8925,1.245C 13.1725,0.88501 13.4525,0.595032 13.7325,0.375C 14.0125,0.154968 14.2862,0.0374756 14.5537,0.022522C 14.8213,0.00750732 15.045,0 15.225,0C 15.405,0 15.6313,0.0974731 15.9038,0.29248C 16.1762,0.487488 16.3587,0.623718 16.4513,0.701233C 16.5437,0.778748 16.735,0.969971 17.025,1.27502C 17.315,1.58002 17.475,1.75 17.505,1.78497C 18.24,2.51501 18.1938,3.96625 17.3662,6.13873C 16.5388,8.31122 15.0038,10.5187 12.7613,12.7612C 10.5187,15.0037 8.3075,16.535 6.1275,17.355C 3.94751,18.175 2.49002,18.21 1.755,17.46L 1.28998,17.04C 0.975006,16.725 0.782501,16.525 0.712524,16.44C 0.642487,16.355 0.502502,16.1675 0.292511,15.8775 Z "
+                                                Fill="White"
+                                                Stretch="Uniform"
+                                                UseLayoutRounding="False" />
                                         </Viewbox>
                                     </Button>
                                     <Button
-                    Name="DialButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorInformation}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Command="{TemplateBinding ToggleDialPadCommand}"
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorInformation}"
+                                         controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
                                             <Viewbox.RenderTransform>
                                                 <TransformGroup>
@@ -176,59 +184,59 @@
                                             </Viewbox.RenderTransform>
                                             <Grid>
                                                 <Path
-                                Margin="5"
-                                Data="F1 M 6.14438,0L 0,0L 0,6.17999L 6.14438,6.17999L 6.14438,0 Z M 14.8022,0L 8.62219,0L 8.62219,6.17999L 14.8022,6.17999L 14.8022,0 Z M 6.14438,9.12L 0,9.12L 0,15.3L 6.14438,15.3L 6.14438,9.12 Z M 14.8022,9.12L 8.62219,9.12L 8.62219,15.3L 14.8022,15.3L 14.8022,9.12 Z M 6.14438,17.7778L 0,17.7778L 0,23.9222L 6.14438,23.9222L 6.14438,17.7778 Z M 14.8022,17.7778L 8.62219,17.7778L 8.62219,23.9222L 14.8022,23.9222L 14.8022,17.7778 Z M 23.9222,0L 17.7422,0L 17.7422,6.17999L 23.9222,6.17999L 23.9222,0 Z M 32.5444,0L 26.4,0L 26.4,6.17999L 32.5444,6.17999L 32.5444,0 Z M 23.9222,9.06656L 17.7422,9.06656L 17.7422,15.2524L 23.9222,15.2524L 23.9222,9.06656 Z M 23.9222,17.7778L 17.7422,17.7778L 17.7422,23.9222L 23.9222,23.9222L 23.9222,17.7778 Z M 32.5444,9.06656L 26.4,9.06656L 26.4,15.2524L 32.5444,15.2524L 32.5444,9.06656 Z M 32.5444,17.686L 26.4,17.686L 26.4,23.9222L 32.5444,23.9222L 32.5444,17.686 Z "
-                                Fill="White"
-                                Stretch="Uniform" />
+                                                    Margin="5"
+                                                    Data="F1 M 6.14438,0L 0,0L 0,6.17999L 6.14438,6.17999L 6.14438,0 Z M 14.8022,0L 8.62219,0L 8.62219,6.17999L 14.8022,6.17999L 14.8022,0 Z M 6.14438,9.12L 0,9.12L 0,15.3L 6.14438,15.3L 6.14438,9.12 Z M 14.8022,9.12L 8.62219,9.12L 8.62219,15.3L 14.8022,15.3L 14.8022,9.12 Z M 6.14438,17.7778L 0,17.7778L 0,23.9222L 6.14438,23.9222L 6.14438,17.7778 Z M 14.8022,17.7778L 8.62219,17.7778L 8.62219,23.9222L 14.8022,23.9222L 14.8022,17.7778 Z M 23.9222,0L 17.7422,0L 17.7422,6.17999L 23.9222,6.17999L 23.9222,0 Z M 32.5444,0L 26.4,0L 26.4,6.17999L 32.5444,6.17999L 32.5444,0 Z M 23.9222,9.06656L 17.7422,9.06656L 17.7422,15.2524L 23.9222,15.2524L 23.9222,9.06656 Z M 23.9222,17.7778L 17.7422,17.7778L 17.7422,23.9222L 23.9222,23.9222L 23.9222,17.7778 Z M 32.5444,9.06656L 26.4,9.06656L 26.4,15.2524L 32.5444,15.2524L 32.5444,9.06656 Z M 32.5444,17.686L 26.4,17.686L 26.4,23.9222L 32.5444,23.9222L 32.5444,17.686 Z "
+                                                    Fill="White"
+                                                    Stretch="Uniform" />
                                             </Grid>
 
                                         </Viewbox>
                                     </Button>
                                     <Button
-                    Name="MuteButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorInformation}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Name="MuteButton"
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorInformation}"
+                                         controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
                                             <Grid>
 
                                                 <Path
-                                Name="MuteOff"
-                                Margin="11"
-                                Data="F1 M 0,12.3675L 0,9.10498C 0,8.79498 0.140015,8.63998 0.419983,8.63998L 1.04254,8.63998C 1.3075,8.63998 1.44,8.79749 1.44,9.11249L 1.44,12.4575C 1.44,13.5225 1.91376,14.5125 2.86127,15.4275C 3.80878,16.3425 5.33502,16.8 7.44,16.8C 9.54498,16.8 11.1512,16.335 12.2587,15.405C 13.3663,14.475 13.92,13.4925 13.92,12.4575L 13.92,9.11249C 13.92,8.79749 14.06,8.63998 14.34,8.63998L 14.94,8.63998C 15.205,8.63998 15.345,8.79498 15.36,9.10498L 15.36,12.3675C 15.36,13.8175 14.7863,15.1125 13.6387,16.2525C 12.4913,17.3925 10.825,18.055 8.64001,18.24L 8.64001,21.6L 11.5425,21.6C 11.8325,21.6 11.985,21.7575 12,22.0725L 12,23.5275C 12,23.8425 11.845,24 11.535,24L 3.34503,24C 3.04999,24 2.89502,23.8425 2.88,23.5275L 2.88,22.0725C 2.88,21.7575 3.03253,21.6 3.33752,21.6L 6.24005,21.6L 6.24005,18.24C 4.21503,18.055 2.66876,17.3925 1.60126,16.2525C 0.533752,15.1125 0,13.8175 0,12.3675 Z M 3.84003,12.4575L 3.84003,8.63998L 11.04,8.63998L 11.04,12.4575C 11.04,12.9475 10.7513,13.3937 10.1738,13.7962C 9.59625,14.1987 8.685,14.4 7.44,14.4C 6.15997,14.4 5.24005,14.1987 4.67999,13.7962C 4.12,13.3937 3.84003,12.9475 3.84003,12.4575 Z M 3.84003,7.19998L 3.84003,1.97247C 3.84003,1.47748 4.12,1.02499 4.67999,0.61499C 5.24005,0.204987 6.15997,0 7.44,0C 8.685,0 9.59625,0.204987 10.1738,0.61499C 10.7513,1.02499 11.04,1.47748 11.04,1.97247L 11.04,7.19998L 3.84003,7.19998 Z "
-                                Fill="White"
-                                Stretch="Uniform"
-                                UseLayoutRounding="False" />
+                                                    Name="MuteOff"
+                                                    Margin="11"
+                                                    Data="F1 M 0,12.3675L 0,9.10498C 0,8.79498 0.140015,8.63998 0.419983,8.63998L 1.04254,8.63998C 1.3075,8.63998 1.44,8.79749 1.44,9.11249L 1.44,12.4575C 1.44,13.5225 1.91376,14.5125 2.86127,15.4275C 3.80878,16.3425 5.33502,16.8 7.44,16.8C 9.54498,16.8 11.1512,16.335 12.2587,15.405C 13.3663,14.475 13.92,13.4925 13.92,12.4575L 13.92,9.11249C 13.92,8.79749 14.06,8.63998 14.34,8.63998L 14.94,8.63998C 15.205,8.63998 15.345,8.79498 15.36,9.10498L 15.36,12.3675C 15.36,13.8175 14.7863,15.1125 13.6387,16.2525C 12.4913,17.3925 10.825,18.055 8.64001,18.24L 8.64001,21.6L 11.5425,21.6C 11.8325,21.6 11.985,21.7575 12,22.0725L 12,23.5275C 12,23.8425 11.845,24 11.535,24L 3.34503,24C 3.04999,24 2.89502,23.8425 2.88,23.5275L 2.88,22.0725C 2.88,21.7575 3.03253,21.6 3.33752,21.6L 6.24005,21.6L 6.24005,18.24C 4.21503,18.055 2.66876,17.3925 1.60126,16.2525C 0.533752,15.1125 0,13.8175 0,12.3675 Z M 3.84003,12.4575L 3.84003,8.63998L 11.04,8.63998L 11.04,12.4575C 11.04,12.9475 10.7513,13.3937 10.1738,13.7962C 9.59625,14.1987 8.685,14.4 7.44,14.4C 6.15997,14.4 5.24005,14.1987 4.67999,13.7962C 4.12,13.3937 3.84003,12.9475 3.84003,12.4575 Z M 3.84003,7.19998L 3.84003,1.97247C 3.84003,1.47748 4.12,1.02499 4.67999,0.61499C 5.24005,0.204987 6.15997,0 7.44,0C 8.685,0 9.59625,0.204987 10.1738,0.61499C 10.7513,1.02499 11.04,1.47748 11.04,1.97247L 11.04,7.19998L 3.84003,7.19998 Z "
+                                                    Fill="White"
+                                                    Stretch="Uniform"
+                                                    UseLayoutRounding="False" />
                                                 <Path
-                                Name="MuteOn"
-                                Margin="10"
-                                Data="F1 M 39.6563,71.065L 39.6563,51.3613L 71.6315,83.336C 68.2774,87.1406 63.405,89.5507 57.9635,89.5507C 47.8515,89.5507 39.6563,81.2759 39.6563,71.065 Z M 76.2706,64.8055L 39.6561,28.2268L 39.6561,23.372C 39.6561,13.1631 47.8513,4.88699 57.9633,4.88699C 68.074,4.88699 76.2706,13.1631 76.2706,23.372L 76.2706,64.8055 Z M 95.2301,68.8763C 95.2301,73.2892 94.3591,77.5039 92.7861,81.3542L 82.7524,71.323C 82.8461,70.5183 82.9074,69.7058 82.9074,68.8763L 82.9074,53.0893L 95.2301,53.0893L 95.2301,68.8763 Z M 86.1666,97.8698C 80.5571,103.8 72.7838,107.66 64.1235,108.18L 64.1236,117.88L 64.1262,117.88L 64.1236,117.883L 64.1235,121.01L 64.1235,121.013L 64.1262,121.013L 82.6054,121.013L 82.6054,133.333L 33.3215,133.333L 33.3215,121.013L 51.8046,121.013L 51.8046,108.18C 34.4751,107.141 20.6964,92.7227 20.6964,75.138L 20.6964,59.351L 33.0194,59.351L 33.0194,75.138C 33.0194,86.6003 42.3423,95.9246 53.8059,95.9246L 62.121,95.9246C 68.1861,95.9246 73.634,93.297 77.4387,89.1432L 86.1666,97.8698 Z M 64.1235,121.01L 64.1196,121.01L 64.1196,121.013L 64.1235,121.01 Z M 121.518,113.081L 113.082,121.518L 0,8.4368L 8.43745,-3.05176e-005L 121.518,113.081 Z "
-                                Fill="White"
-                                Stretch="Uniform"
-                                Visibility="Hidden" />
+                                                    Name="MuteOn"
+                                                    Margin="10"
+                                                    Data="F1 M 39.6563,71.065L 39.6563,51.3613L 71.6315,83.336C 68.2774,87.1406 63.405,89.5507 57.9635,89.5507C 47.8515,89.5507 39.6563,81.2759 39.6563,71.065 Z M 76.2706,64.8055L 39.6561,28.2268L 39.6561,23.372C 39.6561,13.1631 47.8513,4.88699 57.9633,4.88699C 68.074,4.88699 76.2706,13.1631 76.2706,23.372L 76.2706,64.8055 Z M 95.2301,68.8763C 95.2301,73.2892 94.3591,77.5039 92.7861,81.3542L 82.7524,71.323C 82.8461,70.5183 82.9074,69.7058 82.9074,68.8763L 82.9074,53.0893L 95.2301,53.0893L 95.2301,68.8763 Z M 86.1666,97.8698C 80.5571,103.8 72.7838,107.66 64.1235,108.18L 64.1236,117.88L 64.1262,117.88L 64.1236,117.883L 64.1235,121.01L 64.1235,121.013L 64.1262,121.013L 82.6054,121.013L 82.6054,133.333L 33.3215,133.333L 33.3215,121.013L 51.8046,121.013L 51.8046,108.18C 34.4751,107.141 20.6964,92.7227 20.6964,75.138L 20.6964,59.351L 33.0194,59.351L 33.0194,75.138C 33.0194,86.6003 42.3423,95.9246 53.8059,95.9246L 62.121,95.9246C 68.1861,95.9246 73.634,93.297 77.4387,89.1432L 86.1666,97.8698 Z M 64.1235,121.01L 64.1196,121.01L 64.1196,121.013L 64.1235,121.01 Z M 121.518,113.081L 113.082,121.518L 0,8.4368L 8.43745,-3.05176e-005L 121.518,113.081 Z "
+                                                    Fill="White"
+                                                    Stretch="Uniform"
+                                                    Visibility="Hidden" />
                                             </Grid>
 
                                         </Viewbox>
                                     </Button>
                                     <Button
-                    Name="FullScreenButton"
-                    Margin="1"
-                    Padding="10"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource ColorInformation}"
-                    FontSize="{DynamicResource FontSize-Large}"
-                    Foreground="White">
+                                        Name="FullScreenButton"
+                                        Margin="1"
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        Background="{DynamicResource ColorInformation}"
+                                         controls:Material.RelativeFontSizeRatio="1.1"
+                                        Foreground="White">
                                         <Viewbox RenderTransformOrigin="0.5,0.5">
 
                                             <Path
-                            Width="133.333"
-                            Margin="10"
-                            Data="F1 M 133.333,33.3334L 133.333,1.52588e-005L 100,1.52588e-005L 100,10.6667L 115.125,10.6667L 95.1251,30.6667L 38.2077,30.6667L 18.2077,10.6667L 33.3333,10.6667L 33.3333,1.52588e-005L 0,1.52588e-005L 0,33.3334L 10.6667,33.3334L 10.6667,18.2083L 30.6667,38.2083L 30.6667,55.1249L 10.6667,75.1249L 10.6667,60L 0,60L 0,93.3334L 33.3333,93.3334L 33.3333,82.6667L 18.2077,82.6667L 38.2077,62.6667L 95.1251,62.6667L 115.125,82.6667L 100,82.6667L 100,93.3334L 133.333,93.3334L 133.333,60L 122.667,60L 122.667,75.1249L 102.667,55.1249L 102.667,38.2083L 122.667,18.2083L 122.667,33.3334L 133.333,33.3334 Z "
-                            Fill="White"
-                            Stretch="Uniform" />
+                                                Width="133.333"
+                                                Margin="10"
+                                                Data="F1 M 133.333,33.3334L 133.333,1.52588e-005L 100,1.52588e-005L 100,10.6667L 115.125,10.6667L 95.1251,30.6667L 38.2077,30.6667L 18.2077,10.6667L 33.3333,10.6667L 33.3333,1.52588e-005L 0,1.52588e-005L 0,33.3334L 10.6667,33.3334L 10.6667,18.2083L 30.6667,38.2083L 30.6667,55.1249L 10.6667,75.1249L 10.6667,60L 0,60L 0,93.3334L 33.3333,93.3334L 33.3333,82.6667L 18.2077,82.6667L 38.2077,62.6667L 95.1251,62.6667L 115.125,82.6667L 100,82.6667L 100,93.3334L 133.333,93.3334L 133.333,60L 122.667,60L 122.667,75.1249L 102.667,55.1249L 102.667,38.2083L 122.667,18.2083L 122.667,33.3334L 133.333,33.3334 Z "
+                                                Fill="White"
+                                                Stretch="Uniform" />
                                         </Viewbox>
                                     </Button>
                                 </StackPanel>

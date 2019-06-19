@@ -82,12 +82,56 @@ namespace Panacea.Modules.Telephone.ViewModels
                 await Call(args.ToString());
             });
 
-            CallInprogressKeyPressCommand = new RelayCommand(async args =>
+            CallInProgressKeyPressCommand = new RelayCommand(async args =>
             {
                 await _currentPhone.StartDtmf(args.ToString());
                 await Task.Delay(600);
                 await _currentPhone.StopDtmf(args.ToString());
             });
+
+            CallInProgressAnswerCommand = new RelayCommand(args =>
+            {
+                _currentPhone?.Answer();
+            },
+            args =>
+            {
+                return _currentPhone?.IsIncoming == true;
+            });
+            CallInProgressVideoAnswerCommand = new RelayCommand(args =>
+            {
+
+            },
+            args =>
+            {
+                return _currentPhone?.IsIncoming == true;
+            });
+
+            CallInProgressMuteCommand = new RelayCommand(args =>
+            {
+                Muted = true;
+                _currentPhone.Mute();
+            },
+            args => !Muted);
+
+            CallInProgressUnmuteCommand = new RelayCommand(args =>
+            {
+                Muted = false;
+                _currentPhone.Unmute();
+            },
+            args => Muted);
+        }
+
+        bool _muted = false;
+        public bool Muted
+        {
+            get => _muted;
+            set
+            {
+                _muted = value;
+                if (value) _currentPhone?.Mute();
+                else _currentPhone?.Unmute();
+                OnPropertyChanged();
+            }
         }
 
         public override async void Activate()
@@ -534,7 +578,6 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 ui.Toast(_translator.Translate("Call to {0} failed", e));
             }
-
         }
 
         private void Telephone_MissedCall(object sender, string e)
@@ -808,7 +851,15 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public ICommand DialPadKeyPressCommand { get; }
 
-        public ICommand CallInprogressKeyPressCommand { get; }
+        public ICommand CallInProgressKeyPressCommand { get; }
+
+        public ICommand CallInProgressAnswerCommand { get; }
+
+        public ICommand CallInProgressVideoAnswerCommand { get; }
+
+        public ICommand CallInProgressMuteCommand { get; }
+
+        public ICommand CallInProgressUnmuteCommand { get; }
 
         public ICommand DialPadBackspaceCommand { get; }
 

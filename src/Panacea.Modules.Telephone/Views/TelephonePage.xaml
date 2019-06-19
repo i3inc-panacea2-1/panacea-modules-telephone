@@ -652,10 +652,14 @@
         </Grid>
         <lcontrols:CallInProgressControl
             d:IsHidden="true"
+            AnswerCommand="{Binding CallInProgressAnswerCommand}"
             CurrentNumber="{Binding Number}"
             HangUpCommand="{Binding HangUpCommand}"
-            KeyPressCommand="{Binding CallInprogressKeyPressCommand}"
+            KeyPressCommand="{Binding CallInProgressKeyPressCommand}"
             StatusText="{Binding StatusText}"
+            VideoAnswerCommand="{Binding CallInProgressVideoAnswerCommand}"
+            MuteCommand="{Binding CallInProgressMuteCommand}"
+            UnmuteCommand="{Binding CallInProgressUnmuteCommand}"
             Visibility="{Binding CallInProgress, Converter={StaticResource BoolToVis}}" />
 
 

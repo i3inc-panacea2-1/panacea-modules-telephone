@@ -92,6 +92,7 @@
                                                 Width="700"
                                                 Height="900"
                                                 InputVisibility="Collapsed"
+                                                KeyPressCommand="{TemplateBinding KeyPressCommand}"
                                                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CallInProgressControl}, Path=DialPadVisibile, Converter={StaticResource BoolToVis}}">
                                                 <local:DialPad.Effect>
                                                     <DropShadowEffect

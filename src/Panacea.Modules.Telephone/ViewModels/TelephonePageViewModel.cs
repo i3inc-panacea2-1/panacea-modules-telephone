@@ -81,11 +81,18 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 await Call(args.ToString());
             });
+
+            CallInprogressKeyPressCommand = new RelayCommand(async args =>
+            {
+                await _currentPhone.StartDtmf(args.ToString());
+                await Task.Delay(600);
+                await _currentPhone.StopDtmf(args.ToString());
+            });
         }
 
         public override async void Activate()
         {
-            if(_loadingTask != null)
+            if (_loadingTask != null)
             {
                 await _loadingTask;
             }
@@ -281,6 +288,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             }
         }
 
+        TelephoneBase _currentPhone;
         async Task CallWithLine(TelephoneBase telephone, string number, bool video = false)
         {
             StatusText = "";
@@ -289,6 +297,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             //Host.AudioManager.MicrophoneVolume = 1;
             try
             {
+                _currentPhone = telephone;
                 if (_core.TryGetUiManager(out IUiManager ui))
                 {
                     await ui.DoWhileBusy(async () =>
@@ -350,7 +359,6 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 _terminalAccount = value;
                 OnPropertyChanged();
-
             }
         }
 
@@ -373,35 +381,8 @@ namespace Panacea.Modules.Telephone.ViewModels
             get => _userAccount;
             set
             {
-
-                if (_userAccount?.Compare(value) == true)
-                    return;
                 _userAccount = value;
-                var local = _userAccount;
                 OnPropertyChanged();
-                if (_userPhone != null)
-                {
-                    _userPhone.Unregister()
-                        .ContinueWith(t =>
-                        {
-                            if (local != _userAccount) return;
-                            _userPhone.Dispose();
-                            CreatePhone(_userAccount)
-                            .ContinueWith(t2 =>
-                            {
-                                _userPhone = t2.Result;
-                            });
-                        });
-                }
-                else
-                {
-                    if (local != _userAccount) return;
-                    CreatePhone(_userAccount)
-                    .ContinueWith(t2 =>
-                    {
-                        _userPhone = t2.Result;
-                    });
-                }
             }
         }
 
@@ -790,7 +771,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             _loadingTask = source.Task;
             try
             {
-               
+
                 IsBusy = true;
                 var settingsResponse = await _core.HttpClient.GetObjectAsync<GetVoipSettingsResponse>("get_voip_settings/");
                 if (!settingsResponse.Success)
@@ -826,6 +807,8 @@ namespace Panacea.Modules.Telephone.ViewModels
         }
 
         public ICommand DialPadKeyPressCommand { get; }
+
+        public ICommand CallInprogressKeyPressCommand { get; }
 
         public ICommand DialPadBackspaceCommand { get; }
 

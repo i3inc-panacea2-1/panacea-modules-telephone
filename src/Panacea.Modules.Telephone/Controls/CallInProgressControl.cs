@@ -89,6 +89,17 @@ namespace Panacea.Modules.Telephone.Controls
             DependencyProperty.Register("ToggleDialPadCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
 
 
+        public ICommand KeyPressCommand
+        {
+            get { return (ICommand)GetValue(KeyPressCommandProperty); }
+            set { SetValue(KeyPressCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for KeyPressCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty KeyPressCommandProperty =
+            DependencyProperty.Register("KeyPressCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
+
+
 
     }
 }

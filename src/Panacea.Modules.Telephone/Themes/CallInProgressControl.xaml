@@ -85,27 +85,23 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <Viewbox
-                                            Name="Dial"
+
+                                        <local:DialPad
+                                            x:Name="DialerControl"
                                             Grid.Column="1"
                                             Margin="0,10,0,10"
-                                            Visibility="Visible">
-                                            <local:DialPad
-                                                x:Name="DialerControl"
-                                                Width="700"
-                                                Height="900"
-                                                InputVisibility="Collapsed"
-                                                KeyPressCommand="{TemplateBinding KeyPressCommand}"
-                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CallInProgressControl}, Path=DialPadVisibile, Converter={StaticResource BoolToVis}}">
-                                                <local:DialPad.Effect>
-                                                    <DropShadowEffect
-                                                        BlurRadius="5"
-                                                        Direction="0"
-                                                        Opacity=".5"
-                                                        ShadowDepth="0" />
-                                                </local:DialPad.Effect>
-                                            </local:DialPad>
-                                        </Viewbox>
+                                            InputVisibility="Collapsed"
+                                            KeyPressCommand="{TemplateBinding KeyPressCommand}"
+                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CallInProgressControl}, Path=DialPadVisibile, Converter={StaticResource BoolToVis}}">
+                                            <local:DialPad.Effect>
+                                                <DropShadowEffect
+                                                    BlurRadius="5"
+                                                    Direction="0"
+                                                    Opacity=".5"
+                                                    ShadowDepth="0" />
+                                            </local:DialPad.Effect>
+                                        </local:DialPad>
+
                                     </Grid>
                                 </Grid>
                                 <StackPanel
@@ -145,12 +141,16 @@
                                     <Button Background="{DynamicResource ColorInformation}" Command="{TemplateBinding ToggleDialPadCommand}">
                                         <controls:MaterialIcon Icon="dialpad" />
                                     </Button>
-                                    <Button Name="MuteButton" Background="{DynamicResource ColorInformation}"
-                                            Command="{TemplateBinding MuteCommand}">
+                                    <Button
+                                        Name="MuteButton"
+                                        Background="{DynamicResource ColorInformation}"
+                                        Command="{TemplateBinding MuteCommand}">
                                         <controls:MaterialIcon Icon="mic" />
                                     </Button>
-                                    <Button Name="UnmuteButton" Background="{DynamicResource ColorError}"
-                                            Command="{TemplateBinding UnmuteCommand}">
+                                    <Button
+                                        Name="UnmuteButton"
+                                        Background="{DynamicResource ColorError}"
+                                        Command="{TemplateBinding UnmuteCommand}">
                                         <controls:MaterialIcon Icon="mic_off" />
                                     </Button>
                                     <Button Name="FullScreenButton" Background="{DynamicResource ColorInformation}">

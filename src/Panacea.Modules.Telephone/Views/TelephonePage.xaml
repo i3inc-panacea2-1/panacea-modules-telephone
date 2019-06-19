@@ -384,6 +384,7 @@
                                                 <Button
                                                     Margin="0"
                                                     Padding="0"
+                                                    VerticalAlignment="Top"
                                                     HorizontalAlignment="Stretch"
                                                     HorizontalContentAlignment="Stretch"
                                                     Background="White"
@@ -397,7 +398,7 @@
                                                             <RowDefinition Height="Auto" />
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="1*" />
+                                                            <ColumnDefinition Width="auto" />
                                                             <ColumnDefinition Width="5*" />
                                                         </Grid.ColumnDefinitions>
                                                         <Grid Grid.RowSpan="2">
@@ -656,14 +657,17 @@
             CurrentNumber="{Binding Number}"
             HangUpCommand="{Binding HangUpCommand}"
             KeyPressCommand="{Binding CallInProgressKeyPressCommand}"
-            StatusText="{Binding StatusText}"
-            VideoAnswerCommand="{Binding CallInProgressVideoAnswerCommand}"
             MuteCommand="{Binding CallInProgressMuteCommand}"
+            StatusText="{Binding StatusText}"
             UnmuteCommand="{Binding CallInProgressUnmuteCommand}"
+            VideoAnswerCommand="{Binding CallInProgressVideoAnswerCommand}"
             Visibility="{Binding CallInProgress, Converter={StaticResource BoolToVis}}" />
 
 
-        <Grid Background="#22000000" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+        <Grid
+            d:IsHidden="true"
+            Background="#22000000"
+            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />

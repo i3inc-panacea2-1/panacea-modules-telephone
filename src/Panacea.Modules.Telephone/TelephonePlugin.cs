@@ -23,6 +23,7 @@ namespace Panacea.Modules.Telephone
         public TelephonePlugin(PanaceaServices core)
         {
             _core = core;
+            _telephonePage = new TelephonePageViewModel(core);
         }
 
         public Task BeginInit()
@@ -42,36 +43,11 @@ namespace Panacea.Modules.Telephone
 
         public Task EndInit()
         {
-            _ = GetSettingsAsync();
+            _ = _telephonePage.GetSettingsAsync();
             return Task.CompletedTask;
         }
 
-        private async Task GetSettingsAsync()
-        {
-            try
-            {
-                var settingsResponse = await _core.HttpClient.GetObjectAsync<GetVoipSettingsResponse>("get_voip_settings/");
-                if (!settingsResponse.Success)
-                {
-                    _core.Logger.Debug(this, "Failed to get voip settings: " + (settingsResponse.Error));
-                    return;
-                }
-                
-                _settings = settingsResponse.Result;
-                _telephonePage = _telephonePage ?? new TelephonePageViewModel(_core, _settings);
-                _telephonePage.Settings = _settings;
-
-                _telephonePage.TerminalSpeedDials = _settings.Categories.Telephone.SpeedDialCategories.SelectMany(s => s.SpeedDials.Select(sd=>sd.SpeedDial)).ToList();
-                _telephonePage.TerminalAccount = _settings.TerminalAccount;
-                _telephonePage.UserAccount = _settings.UserAccount;
-            }
-            catch (Exception ex)
-            {
-                _core.Logger.Error(this, "Telephone failed to get settings: " + ex.Message);
-                await Task.Delay(new Random().Next(20000, 40000));
-                await GetSettingsAsync();
-            }
-        }
+      
 
         public void Call()
         {
@@ -91,7 +67,7 @@ namespace Panacea.Modules.Telephone
 
         public void Call(string number)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -656,5 +656,35 @@
             HangUpCommand="{Binding HangUpCommand}"
             StatusText="{Binding StatusText}"
             Visibility="{Binding CallInProgress, Converter={StaticResource BoolToVis}}" />
+
+
+        <Grid Background="#22000000" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Border
+                    Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                    Background="White"
+                    CornerRadius="99999">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Opacity=".2"
+                            ShadowDepth="0" />
+                    </Border.Effect>
+                </Border>
+                <Viewbox Margin="10">
+                    <ProgressBar Foreground="{DynamicResource ColorPrimary}" IsIndeterminate="True" />
+                </Viewbox>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

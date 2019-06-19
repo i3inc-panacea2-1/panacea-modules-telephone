@@ -28,10 +28,9 @@ namespace Panacea.Modules.Telephone.ViewModels
         Translator _translator = new Translator("Telephone");
         Service _currentService;
 
-        public TelephonePageViewModel(PanaceaServices core, GetVoipSettingsResponse settings)
+        public TelephonePageViewModel(PanaceaServices core)
         {
             _core = core;
-            _settings = settings;
             DialPadKeyPressCommand = new RelayCommand(args =>
             {
                 var character = args.ToString();
@@ -86,7 +85,10 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public override async void Activate()
         {
-
+            if(_loadingTask != null)
+            {
+                await _loadingTask;
+            }
             if (!AvailabilityEnabled && _core.TryGetUiManager(out IUiManager ui))
             {
                 ui.Toast(new Translator("Telephone").Translate("Your availability is set to OFF. You cannot receive incoming calls. Set your availability back on to receive incoming calls"));
@@ -346,34 +348,23 @@ namespace Panacea.Modules.Telephone.ViewModels
             get => _terminalAccount;
             set
             {
-                if (_terminalAccount?.Compare(value) == true)
-                    return;
                 _terminalAccount = value;
-                var local = _terminalAccount;
                 OnPropertyChanged();
-                if (_terminalPhone != null)
-                {
-                    _terminalPhone.Unregister()
-                        .ContinueWith(t =>
-                        {
-                            if (local != _terminalAccount) return;
-                            _terminalPhone.Dispose();
-                            CreatePhone(_terminalAccount)
-                            .ContinueWith(t2 =>
-                            {
-                                _terminalPhone = t2.Result;
-                            });
-                        });
-                }
-                else
-                {
-                    if (local != _terminalAccount) return;
-                    CreatePhone(_terminalAccount)
-                    .ContinueWith(t2 =>
-                    {
-                        _terminalPhone = t2.Result;
-                    });
-                }
+
+            }
+        }
+
+        async Task<TelephoneBase> RegisterPhone(ITelephoneAccount account, TelephoneBase telephone)
+        {
+            if (telephone != null)
+            {
+                await telephone.Unregister();
+                telephone.Dispose();
+                return await CreatePhone(_terminalAccount);
+            }
+            else
+            {
+                return await CreatePhone(_terminalAccount);
             }
         }
 
@@ -411,6 +402,17 @@ namespace Panacea.Modules.Telephone.ViewModels
                         _userPhone = t2.Result;
                     });
                 }
+            }
+        }
+
+        bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged();
             }
         }
 
@@ -779,6 +781,48 @@ namespace Panacea.Modules.Telephone.ViewModels
             _counter.Enabled = false;
             _counter.Dispose();
             _counter = null;
+        }
+
+        Task _loadingTask;
+        internal async Task GetSettingsAsync()
+        {
+            var source = new TaskCompletionSource<object>();
+            _loadingTask = source.Task;
+            try
+            {
+               
+                IsBusy = true;
+                var settingsResponse = await _core.HttpClient.GetObjectAsync<GetVoipSettingsResponse>("get_voip_settings/");
+                if (!settingsResponse.Success)
+                {
+                    _core.Logger.Debug(this, "Failed to get voip settings: " + (settingsResponse.Error));
+                    return;
+                }
+                Settings = settingsResponse.Result;
+                TerminalSpeedDials = _settings.Categories.Telephone.SpeedDialCategories.SelectMany(s => s.SpeedDials.Select(sd => sd.SpeedDial)).ToList();
+                if (TerminalAccount?.Compare(_settings.TerminalAccount) != true)
+                {
+                    TerminalAccount = _settings.TerminalAccount;
+                    _terminalPhone = await RegisterPhone(TerminalAccount, _terminalPhone);
+                }
+                if (UserAccount?.Compare(_settings.UserAccount) != true)
+                {
+                    UserAccount = _settings.UserAccount;
+                    _userPhone = await RegisterPhone(UserAccount, _userPhone);
+                }
+            }
+            catch (Exception ex)
+            {
+                _core.Logger.Error(this, "Telephone failed to get settings: " + ex.Message);
+                await Task.Delay(new Random().Next(20000, 40000));
+                await GetSettingsAsync();
+            }
+            finally
+            {
+                IsBusy = false;
+                source.TrySetResult(null);
+                _loadingTask = null;
+            }
         }
 
         public ICommand DialPadKeyPressCommand { get; }

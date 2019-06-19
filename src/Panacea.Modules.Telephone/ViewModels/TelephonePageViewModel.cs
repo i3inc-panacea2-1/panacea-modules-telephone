@@ -10,6 +10,7 @@ using Panacea.Multilinguality;
 using Panacea.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace Panacea.Modules.Telephone.ViewModels
         private readonly PanaceaServices _core;
         private TelephoneBase _terminalPhone, _userPhone;
         bool _autoRejected, _wasIncoming;
-        private List<SpeedDial> _terminalSpeedDials, _userSpeedDials;
+        private ObservableCollection<SpeedDial> _terminalSpeedDials;
+        private ObservableCollection<UserSpeedDial> _userSpeedDials;
         DateTime _lastCallStartTime;
         Translator _translator = new Translator("Telephone");
         Service _currentService;
@@ -444,7 +446,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         GetVoipSettingsResponse _settings;
 
-        public List<SpeedDial> TerminalSpeedDials
+        public ObservableCollection<SpeedDial> TerminalSpeedDials
         {
             get => _terminalSpeedDials;
             set
@@ -454,7 +456,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             }
         }
 
-        public List<SpeedDial> UserSpeedDials
+        public ObservableCollection<UserSpeedDial> UserSpeedDials
         {
             get => _userSpeedDials;
             set
@@ -521,6 +523,18 @@ namespace Panacea.Modules.Telephone.ViewModels
             }
         }
 
+        ObservableCollection<CallLogItem> _callHistory = new ObservableCollection<CallLogItem>();
+        public ObservableCollection<CallLogItem> CallHistory
+        {
+            get => _callHistory;
+            set
+            {
+                _callHistory = value;
+                OnPropertyChanged();
+            }
+
+        }
+
         private async Task<TelephoneBase> CreatePhone(TelephoneAccount account)
         {
             if (account == null) return null;
@@ -542,6 +556,9 @@ namespace Panacea.Modules.Telephone.ViewModels
             await phone.Register();
             return phone;
         }
+
+        DateTime _callStart;
+        DateTime _callEnd;
 
         private void AttachHandlers(TelephoneBase telephone)
         {
@@ -588,7 +605,7 @@ namespace Panacea.Modules.Telephone.ViewModels
         private void Telephone_Answered(object sender, string e)
         {
             CallInProgress = true;
-
+            _callStart = DateTime.Now;
             _lastCallStartTime = DateTime.Now;
             //CallPage.HandleCall(dials.Any(d => d.Number == ee) ? dials.First(d => d.Number == ee).Label : ee);
             //CallPage.SetLocalVideo(telephone.LocalVideoControl);
@@ -613,13 +630,16 @@ namespace Panacea.Modules.Telephone.ViewModels
             OnCallEnded();
         }
 
-        private void Telephone_Closed(object sender, string e)
+        private async void Telephone_Closed(object sender, string e)
         {
             OnCallEnded();
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Successful, e,
+                _callStart, _callEnd);
         }
 
         void OnCallEnded()
         {
+            _callEnd = DateTime.Now;
             CallInProgress = false;
             StopCount();
             Number = "";
@@ -823,7 +843,12 @@ namespace Panacea.Modules.Telephone.ViewModels
                     return;
                 }
                 Settings = settingsResponse.Result;
-                TerminalSpeedDials = _settings.Categories.Telephone.SpeedDialCategories.SelectMany(s => s.SpeedDials.Select(sd => sd.SpeedDial)).ToList();
+                TerminalSpeedDials = new ObservableCollection<SpeedDial>(
+                    _settings
+                        .Categories
+                        .Telephone
+                        .SpeedDialCategories
+                        .SelectMany(s => s.SpeedDials.Select(sd => sd.SpeedDial)).ToList());
                 if (TerminalAccount?.Compare(_settings.TerminalAccount) != true)
                 {
                     TerminalAccount = _settings.TerminalAccount;
@@ -833,6 +858,11 @@ namespace Panacea.Modules.Telephone.ViewModels
                 {
                     UserAccount = _settings.UserAccount;
                     _userPhone = await RegisterPhone(UserAccount, _userPhone);
+                }
+
+                if (_core.UserService.User.Id != null)
+                {
+                    await GetUserInfoAsync();
                 }
             }
             catch (Exception ex)
@@ -846,6 +876,96 @@ namespace Panacea.Modules.Telephone.ViewModels
                 IsBusy = false;
                 source.TrySetResult(null);
                 _loadingTask = null;
+            }
+        }
+        private async Task GetUserDialsAsync()
+        {
+            var resp = await _core.HttpClient.GetCookieAsync<ObservableCollection<UserSpeedDial>>("Telephone");
+            if (resp.Success)
+            {
+                UserSpeedDials = resp.Result;
+            }
+
+        }
+
+        async Task GetUserInfoAsync()
+        {
+            try
+            {
+                await GetUserDialsAsync();
+                await GetCallHistoryAsync();
+            }
+            catch
+            {
+                //not implemented
+            }
+
+
+        }
+
+        public async Task AddCallLogItem(CallDirection direction, CallStatus status, string number, DateTime callStart, DateTime callEnd)
+        {
+            if (string.IsNullOrEmpty(number)) return;
+            if (callStart == null) callStart = _lastCallStartTime;
+            var display = number;
+            var td = TerminalSpeedDials.FirstOrDefault(d => d.Number == number);
+            if (td != null) display = td.Label;
+            var duration = (int)callEnd.Subtract(callStart).TotalSeconds;
+            var item = new CallLogItem()
+            {
+                Direction = direction,
+                Status = status,
+                Number = number,
+                Seconds = duration,
+                TimeStamp = callStart,
+                Display = display
+            };
+            try
+            {
+                item.Id = await AddCallLogToServerAsync(direction, status, number, duration, CallType.Free);
+                if (_core.UserService.User.Id == null) return;
+                CallHistory.Insert(0, item);
+            }
+            catch
+            {
+                //mistakes were made
+            }
+
+        }
+
+        private async Task<string> AddCallLogToServerAsync(CallDirection direction, CallStatus status, string number,
+            int duration, CallType type)
+        {
+            var result = await _core.HttpClient.GetObjectAsync<string>(
+                "telephone/addcall/",
+                new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("direction", direction.ToString()),
+                    new KeyValuePair<string, string>("status", status.ToString()),
+                    new KeyValuePair<string, string>("duration", duration.ToString()),
+                    new KeyValuePair<string, string>("type", type.ToString()),
+                    new KeyValuePair<string, string>("number", number),
+                    new KeyValuePair<string, string>("timestamp", _lastCallStartTime.ToUniversalTime().ToString("O"))
+                }
+                );
+            return result.Result;
+
+        }
+
+        async Task GetCallHistoryAsync()
+        {
+            CallHistory.Clear();
+            var response = await _core.HttpClient.GetObjectAsync<List<CallLogItem>>("telephone/get_call_history/");
+
+            foreach (var dial in response.Result.OrderByDescending(d => d.TimeStamp).Take(60))
+            {
+                var td = TerminalSpeedDials.FirstOrDefault(d => d.Number == dial.Number);
+                if (td != null)
+                {
+                    dial.Display = td.Label;
+                }
+                else dial.Display = dial.Number;
+                CallHistory.Add(dial);
             }
         }
 

@@ -384,8 +384,8 @@
                                                 <Button
                                                     Margin="0"
                                                     Padding="0"
-                                                    VerticalAlignment="Top"
                                                     HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Stretch"
                                                     Background="White"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
@@ -448,7 +448,7 @@
                                         VerticalAlignment="Stretch"
                                         PanningMode="VerticalOnly"
                                         VerticalScrollBarVisibility="Hidden">
-                                        <ItemsControl Name="UserDials">
+                                        <ItemsControl ItemsSource="{Binding UserSpeedDials}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel />
@@ -513,7 +513,7 @@
                                     VerticalAlignment="Stretch"
                                     PanningMode="VerticalOnly"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsControl ItemsSource="{Binding ElementName=main, Path=CallHistory}">
+                                    <ItemsControl ItemsSource="{Binding CallHistory}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Border BorderBrush="#55ffffff" BorderThickness="0,0,0,1">

@@ -88,14 +88,20 @@
     <Compile Include="Controls\DialPad.cs" />
     <Compile Include="Controls\NumericButton.cs" />
     <Compile Include="Models\ButtonAppearance.cs" />
+    <Compile Include="Models\CallDirection.cs" />
+    <Compile Include="Models\CallLogItem.cs" />
+    <Compile Include="Models\CallStatus.cs" />
+    <Compile Include="Models\CallType.cs" />
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\GetVoipSettingsResponse.cs" />
+    <Compile Include="Models\SendCookieTelephoneResponse.cs" />
     <Compile Include="Models\ServerTelephone.cs" />
     <Compile Include="Models\SpeedDial.cs" />
     <Compile Include="Models\SpeedDialCategory.cs" />
     <Compile Include="Models\SpeedDialInstance.cs" />
     <Compile Include="Models\TelephoneAccount.cs" />
     <Compile Include="Models\TelephoneSettings.cs" />
+    <Compile Include="Models\UserSpeedDial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

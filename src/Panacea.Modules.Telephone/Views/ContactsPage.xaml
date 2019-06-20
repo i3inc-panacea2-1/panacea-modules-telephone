@@ -1,0 +1,149 @@
+﻿<UserControl
+    x:Class="Panacea.Modules.Telephone.Views.ContactsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Panacea.Modules.Telephone.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mi="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
+    xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid mi:Material.RelativeFontSizeRatio="1.0" Background="#f3f3f3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+           
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Margin="10"
+            mi:Material.RelativeFontSizeRatio="1.3"
+            Text="{multilinguality:Translate 'Manage your speed dials',
+                                             'Telephone'}"
+            TextAlignment="Center" />
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            mi:Material.RelativeFontSizeRatio="1.1"
+            Foreground="#999999"
+            Text="{Binding HelpText}"
+            TextAlignment="Center"
+            TextWrapping="Wrap" />
+        <Button
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Margin="10"
+            mi:Material.Icon="add"
+            Command="{Binding AddContactCommand}"
+            Content="{multilinguality:Translate 'Add new contact',
+                                                'Telephone'}"
+            Style="{DynamicResource PrimaryButton}" />
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl
+                Grid.Column="1"
+                Margin="20"
+                ItemsSource="{Binding Contacts}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="30,10" Background="#fff">
+
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox
+                                    Grid.Column="0"
+                                    Margin="2"
+                                    mi:Material.Label="{multilinguality:Translate 'Name',
+                                                                                  'Telephone'}"
+                                    mi:Material.RelativeFontSizeRatio="1.1"
+                                    MaxLength="12"
+                                    Text="{Binding Label, Mode=TwoWay}" />
+
+                                <TextBox
+                                    Grid.Column="1"
+                                    Margin="2"
+                                    mi:Material.Label="{multilinguality:Translate 'Number',
+                                                                                  'Telephone'}"
+                                    mi:Material.RelativeFontSizeRatio="1.1"
+                                    MaxLength="15"
+                                    Text="{Binding Number, Mode=TwoWay}" />
+                                <UniformGrid
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    Rows="1">
+
+                                    <Button
+                                        Padding="15,10,15,9"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.MoveUpCommand}"
+                                        CommandParameter="{Binding}"
+                                        Style="{DynamicResource PrimaryButton}">
+                                        <mi:MaterialIcon Icon="keyboard_arrow_up" />
+                                    </Button>
+
+                                    <Button
+                                        Padding="15,10,15,9"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.MoveDownCommand}"
+                                        CommandParameter="{Binding}"
+                                        Style="{DynamicResource PrimaryButton}">
+                                        <mi:MaterialIcon Icon="keyboard_arrow_down" />
+                                    </Button>
+
+
+                                    <Button
+                                        Padding="15,10,15,9"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="#f8f8f8"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.RemoveCommand}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="Black">
+                                        <mi:MaterialIcon Icon="close" />
+                                    </Button>
+                                </UniformGrid>
+                            </Grid>
+
+
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+        </Grid>
+        
+        <UniformGrid
+            Grid.Row="4"
+            Margin="10"
+            HorizontalAlignment="Center">
+
+            <Button
+                mi:Material.AsyncCommand="{Binding SaveCommand}"
+                Content="{multilinguality:Translate 'Save',
+                                                    'Telephone'}"
+                Style="{DynamicResource PrimaryButton}" />
+            <Button Command="{Binding CancelCommand}" Content="{multilinguality:Translate 'Back', 'Telephone'}" />
+        </UniformGrid>
+    </Grid>
+</UserControl>

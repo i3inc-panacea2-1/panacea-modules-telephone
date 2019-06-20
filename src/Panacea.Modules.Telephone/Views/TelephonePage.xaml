@@ -443,193 +443,209 @@
                                         <RowDefinition />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <ScrollViewer
-                                        Margin="0,10,0,0"
-                                        VerticalAlignment="Stretch"
-                                        PanningMode="VerticalOnly"
-                                        VerticalScrollBarVisibility="Hidden">
-                                        <ItemsControl ItemsSource="{Binding UserSpeedDials}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Button
-                                                        Name="nurse"
-                                                        Margin="3"
-                                                        HorizontalAlignment="Stretch"
-                                                        HorizontalContentAlignment="Stretch"
-                                                        Tag="{Binding}">
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition />
-                                                                <RowDefinition />
-                                                                <RowDefinition Height="Auto" />
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock
-                                                                Grid.Row="0"
-                                                                Margin="6,3"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Bottom"
-                                                                controls:Material.RelativeFontSizeRatio="1.1"
-                                                                Text="{Binding Label}" />
-                                                            <TextBlock
-                                                                Grid.Row="1"
-                                                                Margin="6,3"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Top"
-                                                                controls:Material.RelativeFontSizeRatio="1.1"
-                                                                Foreground="#777777"
-                                                                Text="{Binding Number}"
-                                                                TextTrimming="CharacterEllipsis" />
-                                                            <Border
-                                                                Grid.Row="2"
-                                                                Grid.Column="0"
-                                                                Grid.ColumnSpan="2"
-                                                                Margin="4,0"
-                                                                Background="#ffffff"
-                                                                BorderBrush="#f8f8f8"
-                                                                BorderThickness="0,0,0,1" />
-                                                        </Grid>
-                                                    </Button>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </ScrollViewer>
+
+                                    <ItemsControl ItemsSource="{Binding UserSpeedDials}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button
+                                                    Name="nurse"
+                                                    Margin="3"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
+                                                    CommandParameter="{Binding Number}">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock
+                                                            Grid.Row="0"
+                                                            Margin="6,3"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Bottom"
+                                                            controls:Material.RelativeFontSizeRatio="1.1"
+                                                            Text="{Binding Label}" />
+                                                        <TextBlock
+                                                            Grid.Row="1"
+                                                            Margin="6,3"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top"
+                                                            controls:Material.RelativeFontSizeRatio="1.1"
+                                                            Foreground="#777777"
+                                                            Text="{Binding Number}"
+                                                            TextTrimming="CharacterEllipsis" />
+                                                        <Border
+                                                            Grid.Row="2"
+                                                            Grid.Column="0"
+                                                            Grid.ColumnSpan="2"
+                                                            Margin="4,0"
+                                                            Background="#ffffff"
+                                                            BorderBrush="#f8f8f8"
+                                                            BorderThickness="0,0,0,1" />
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                     <Button
-                                        Name="addSpeedDial"
+                                        Command="{Binding ManageContactsCommand}"
                                         Grid.Row="1"
                                         VerticalAlignment="Bottom"
-                                        Background="{DynamicResource ColorInformation}"
                                         Content="{multilinguality:Translate 'Manage your contacts',
-                                                                            'Telephone'}" />
+                                                                            'Telephone'}"
+                                        Style="{DynamicResource PrimaryButton}" />
                                 </Grid>
 
                             </TabItem>
                             <TabItem Name="CallHistoryTab" Header="Call History">
-                                <ScrollViewer
-                                    VerticalAlignment="Stretch"
-                                    PanningMode="VerticalOnly"
-                                    VerticalScrollBarVisibility="Auto">
-                                    <ItemsControl ItemsSource="{Binding CallHistory}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="#55ffffff" BorderThickness="0,0,0,1">
-                                                    <Grid Margin="0,1,0,0">
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="10*" />
-                                                                <ColumnDefinition Width="42*" />
-                                                                <ColumnDefinition Width="30*" />
-                                                                <ColumnDefinition Width="auto" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition />
-                                                                <RowDefinition Height="Auto" />
-                                                            </Grid.RowDefinitions>
-                                                            <Grid>
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="1*" />
-                                                                    <RowDefinition Height="1.7*" />
-                                                                    <RowDefinition Height="1*" />
-                                                                </Grid.RowDefinitions>
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="1*" />
-                                                                    <ColumnDefinition Width="1.7*" />
-                                                                    <ColumnDefinition Width="1*" />
-                                                                </Grid.ColumnDefinitions>
-                                                                <Viewbox
-                                                                    Grid.Row="1"
-                                                                    Grid.Column="1"
-                                                                    RenderTransformOrigin=".5,.5">
-                                                                    <Viewbox.RenderTransform>
-                                                                        <RotateTransform Angle="{Binding Rotation}" />
-                                                                    </Viewbox.RenderTransform>
-                                                                    <Path
-                                                                        Name="PathIcon"
-                                                                        Margin="3"
-                                                                        VerticalAlignment="Center"
-                                                                        Data="F1 M 0,10.7852L 14.0247,21.5698L 14.0247,14.7494L 26.8469,14.7494L 26.8469,6.82025L 14.0247,6.82025L 14.0247,0L 0,10.7852 Z "
-                                                                        Fill="{Binding ColorBrush}" />
-                                                                </Viewbox>
-                                                            </Grid>
-                                                            <Button
-                                                                Name="SpeedDialButton"
-                                                                Grid.Row="0"
-                                                                Grid.Column="1"
-                                                                HorizontalContentAlignment="Left"
-                                                                Background="Transparent"
-                                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
-                                                                CommandParameter="{Binding Number}">
-                                                                <TextBlock
-                                                                    Margin="10"
-                                                                    HorizontalAlignment="Left"
-                                                                    VerticalAlignment="Center"
-                                                                    controls:Material.RelativeFontSizeRatio="1.5"
-                                                                    Foreground="#222222"
-                                                                    Text="{Binding Display}" />
-                                                            </Button>
-                                                            <Grid Grid.Row="0" Grid.Column="2">
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="3*" />
-                                                                    <RowDefinition Height="2.2*" />
-                                                                </Grid.RowDefinitions>
-                                                                <TextBlock
-                                                                    Name="time"
-                                                                    Margin="2"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Bottom"
-                                                                    controls:Material.RelativeFontSizeRatio="1.1"
-                                                                    Foreground="#222222"
-                                                                    Text="{Binding TimeStamp, StringFormat=g}" />
-                                                                <TextBlock
-                                                                    Name="duration"
-                                                                    Grid.Row="1"
-                                                                    Margin="2"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Top"
-                                                                    controls:Material.RelativeFontSizeRatio=".9"
-                                                                    Foreground="#222222"
-                                                                    Opacity="0.8"
-                                                                    Text="{Binding Duration, StringFormat=hh\':\'mm\':\'ss}" />
-                                                            </Grid>
-                                                            <Border
-                                                                Grid.Row="0"
-                                                                Grid.Column="3"
-                                                                Margin="2,6"
-                                                                BorderBrush="#000000"
-                                                                BorderThickness="0,0,1,0"
-                                                                Opacity="0.1" />
-                                                            <Button
-                                                                Name="remove"
-                                                                Grid.Row="0"
-                                                                Grid.Column="4"
-                                                                controls:Material.AsyncCommand="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.RemoveCallHistoryItemCommand}"
-                                                                CommandParameter="{Binding}">
-                                                                <controls:MaterialIcon
-                                                                    Padding="20"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    controls:Material.RelativeFontSizeRatio="1.1"
-                                                                    Foreground="#222222"
-                                                                    Icon="close" />
-                                                            </Button>
-                                                            <Border
-                                                                Grid.Row="1"
-                                                                Grid.ColumnSpan="5"
-                                                                BorderBrush="#eee"
-                                                                BorderThickness="0,1,0,0" />
-                                                        </Grid>
 
+                                <ItemsControl
+                                    ItemsSource="{Binding CallHistory}"
+                                    ScrollViewer.CanContentScroll="True"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    VirtualizingStackPanel.IsVirtualizing="True">
+                                    <ItemsControl.Template>
+                                        <ControlTemplate>
+                                            <Border
+                                                Padding="{TemplateBinding Control.Padding}"
+                                                Background="{TemplateBinding Panel.Background}"
+                                                BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                                BorderThickness="{TemplateBinding Border.BorderThickness}"
+                                                SnapsToDevicePixels="True">
+                                                <ScrollViewer Padding="{TemplateBinding Control.Padding}" PanningMode="VerticalOnly">
+                                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                                </ScrollViewer>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ItemsControl.Template>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="#55ffffff" BorderThickness="0,0,0,1">
+                                                <Grid Margin="0,1,0,0">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="10*" />
+                                                            <ColumnDefinition Width="42*" />
+                                                            <ColumnDefinition Width="30*" />
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="1*" />
+                                                                <RowDefinition Height="1.7*" />
+                                                                <RowDefinition Height="1*" />
+                                                            </Grid.RowDefinitions>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="1*" />
+                                                                <ColumnDefinition Width="1.7*" />
+                                                                <ColumnDefinition Width="1*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Viewbox
+                                                                Grid.Row="1"
+                                                                Grid.Column="1"
+                                                                RenderTransformOrigin=".5,.5">
+                                                                <Viewbox.RenderTransform>
+                                                                    <RotateTransform Angle="{Binding Rotation}" />
+                                                                </Viewbox.RenderTransform>
+                                                                <Path
+                                                                    Name="PathIcon"
+                                                                    Margin="3"
+                                                                    VerticalAlignment="Center"
+                                                                    Data="F1 M 0,10.7852L 14.0247,21.5698L 14.0247,14.7494L 26.8469,14.7494L 26.8469,6.82025L 14.0247,6.82025L 14.0247,0L 0,10.7852 Z "
+                                                                    Fill="{Binding ColorBrush}" />
+                                                            </Viewbox>
+                                                        </Grid>
+                                                        <Button
+                                                            Name="SpeedDialButton"
+                                                            Grid.Row="0"
+                                                            Grid.Column="1"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
+                                                            CommandParameter="{Binding Number}">
+                                                            <TextBlock
+                                                                Margin="10"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Center"
+                                                                controls:Material.RelativeFontSizeRatio="1.5"
+                                                                Foreground="#222222"
+                                                                Text="{Binding Display}" />
+                                                        </Button>
+                                                        <Grid Grid.Row="0" Grid.Column="2">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="3*" />
+                                                                <RowDefinition Height="2.2*" />
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock
+                                                                Name="time"
+                                                                Margin="2"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Bottom"
+                                                                controls:Material.RelativeFontSizeRatio="1.1"
+                                                                Foreground="#222222"
+                                                                Text="{Binding TimeStamp, StringFormat=g}" />
+                                                            <TextBlock
+                                                                Name="duration"
+                                                                Grid.Row="1"
+                                                                Margin="2"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Top"
+                                                                controls:Material.RelativeFontSizeRatio=".9"
+                                                                Foreground="#222222"
+                                                                Opacity="0.8"
+                                                                Text="{Binding Duration, StringFormat=hh\':\'mm\':\'ss}" />
+                                                        </Grid>
+                                                        <Border
+                                                            Grid.Row="0"
+                                                            Grid.Column="3"
+                                                            Margin="2,6"
+                                                            BorderBrush="#000000"
+                                                            BorderThickness="0,0,1,0"
+                                                            Opacity="0.1" />
+                                                        <Button
+                                                            Name="remove"
+                                                            Grid.Row="0"
+                                                            Grid.Column="4"
+                                                            controls:Material.AsyncCommand="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.RemoveCallHistoryItemCommand}"
+                                                            CommandParameter="{Binding}">
+                                                            <controls:MaterialIcon
+                                                                Padding="20"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                controls:Material.RelativeFontSizeRatio="1.1"
+                                                                Foreground="#222222"
+                                                                Icon="close" />
+                                                        </Button>
+                                                        <Border
+                                                            Grid.Row="1"
+                                                            Grid.ColumnSpan="5"
+                                                            BorderBrush="#eee"
+                                                            BorderThickness="0,1,0,0" />
                                                     </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
+
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </TabItem>
                         </TabControl>
 

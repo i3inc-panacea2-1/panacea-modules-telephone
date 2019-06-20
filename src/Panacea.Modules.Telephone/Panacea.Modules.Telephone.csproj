@@ -117,13 +117,13 @@
     </Compile>
     <Compile Include="TelephonePlugin.cs" />
     <Compile Include="ViewModels\CallPopupViewModel.cs" />
-    <Compile Include="ViewModels\SpeedDialPageViewModel.cs" />
+    <Compile Include="ViewModels\ContactsPageViewModel.cs" />
     <Compile Include="ViewModels\TelephonePageViewModel.cs" />
     <Compile Include="Views\CallPopup.xaml.cs">
       <DependentUpon>CallPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SpeedDialPage.xaml.cs">
-      <DependentUpon>SpeedDialPage.xaml</DependentUpon>
+    <Compile Include="Views\ContactsPage.xaml.cs">
+      <DependentUpon>ContactsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TelephonePage.xaml.cs">
       <DependentUpon>TelephonePage.xaml</DependentUpon>
@@ -187,7 +187,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SpeedDialPage.xaml">
+    <Page Include="Views\ContactsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,5 +11,14 @@ namespace Panacea.Modules.Telephone.Models
         public string Label { get; set; }
 
         public string Number { get; set; }
+
+        public UserSpeedDial Clone()
+        {
+            return new UserSpeedDial()
+            {
+                Label = Label,
+                Number = Number
+            };
+        }
     }
 }

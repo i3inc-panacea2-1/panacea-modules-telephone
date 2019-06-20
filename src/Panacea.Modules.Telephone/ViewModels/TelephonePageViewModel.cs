@@ -142,6 +142,37 @@ namespace Panacea.Modules.Telephone.ViewModels
                     }
                 }
             });
+            ManageContactsCommand = new RelayCommand(async args =>
+            {
+                if (_core.TryGetUserAccountManager(out IUserAccountManager user))
+                {
+                    if (await user.RequestLoginAsync(_translator.Translate("You must create an account to use Telephone."))
+                    && _core.TryGetUiManager(out IUiManager ui))
+                    {
+                        if (ui.CurrentPage != this) ui.Navigate(this);
+                        var source = new TaskCompletionSource<bool>();
+                        var vm = new ContactsPageViewModel(_userSpeedDials, source, _core);
+                        ui.Navigate(vm, false);
+                        var res = await source.Task;
+                        if(ui.CurrentPage != this)
+                        {
+                            ui.Navigate(this);
+                        }
+                        if (res)
+                        {
+                            IsBusy = true;
+                            try
+                            {
+                                await GetUserDialsAsync();
+                            }
+                            finally
+                            {
+                                IsBusy = false;
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         bool _muted = false;
@@ -694,7 +725,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         void OnCallEnded()
         {
-           
+
             _callEnd = DateTime.Now;
             CallInProgress = false;
             StopCount();
@@ -878,7 +909,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                     }
                 };
             }
-            if(_currentService != null)
+            if (_currentService != null)
             {
                 StartServiceMonitor(_currentService);
             }
@@ -970,16 +1001,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         async Task GetUserInfoAsync()
         {
-            try
-            {
-                await GetUserDialsAsync();
-                await GetCallHistoryAsync();
-            }
-            catch
-            {
-                //not implemented
-            }
-
+            await GetUserDialsAsync();
+            await GetCallHistoryAsync();
 
         }
 
@@ -1072,5 +1095,7 @@ namespace Panacea.Modules.Telephone.ViewModels
         public ICommand HangUpCommand { get; }
 
         public AsyncCommand RemoveCallHistoryItemCommand { get; }
+
+        public ICommand ManageContactsCommand { get; }
     }
 }

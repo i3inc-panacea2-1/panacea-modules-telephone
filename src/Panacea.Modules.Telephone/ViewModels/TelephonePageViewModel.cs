@@ -121,6 +121,24 @@ namespace Panacea.Modules.Telephone.ViewModels
                 _currentPhone.Unmute();
             },
             args => Muted);
+
+            RemoveCallHistoryItemCommand = new AsyncCommand(async args =>
+            {
+                var item = args as CallLogItem;
+                if (item == null) return;
+                try
+                {
+                    await _core.HttpClient.GetObjectAsync<object>("telephone/removecall/" + item.Id + "/");
+                    CallHistory.Remove(item);
+                }
+                catch
+                {
+                    if (_core.TryGetUiManager(out IUiManager ui))
+                    {
+                        ui.Toast(_translator.Translate("Action failed. Please try again later."));
+                    }
+                }
+            });
         }
 
         bool _muted = false;
@@ -574,32 +592,40 @@ namespace Panacea.Modules.Telephone.ViewModels
             telephone.Busy += Telephone_Busy;
         }
 
-        private void Telephone_Busy(object sender, string e)
+        private async void Telephone_Busy(object sender, string e)
         {
             OnCallEnded();
             if (_core.TryGetUiManager(out IUiManager ui))
             {
                 ui.Toast(_translator.Translate("{0} was busy..", e));
             }
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Busy, e,
+               _callStart, _callEnd);
         }
 
-        private void Telephone_Rejected(object sender, string e)
+        private async void Telephone_Rejected(object sender, string e)
         {
             OnCallEnded();
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Busy, e,
+               _callStart, _callEnd);
         }
 
-        private void Telephone_Failed(object sender, string e)
+        private async void Telephone_Failed(object sender, string e)
         {
             OnCallEnded();
             if (_core.TryGetUiManager(out IUiManager ui))
             {
                 ui.Toast(_translator.Translate("Call to {0} failed", e));
             }
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Failed, e,
+               _callStart, _callEnd);
         }
 
-        private void Telephone_MissedCall(object sender, string e)
+        private async void Telephone_MissedCall(object sender, string e)
         {
             OnCallEnded();
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Missed, e,
+               _callStart, _callEnd);
         }
 
         private void Telephone_Answered(object sender, string e)
@@ -625,9 +651,11 @@ namespace Panacea.Modules.Telephone.ViewModels
             StatusText = _translator.Translate("Ringing...");
         }
 
-        private void Telephone_Cancelled(object sender, string e)
+        private async void Telephone_Cancelled(object sender, string e)
         {
             OnCallEnded();
+            await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Cancelled, e,
+                _callStart, _callEnd);
         }
 
         private async void Telephone_Closed(object sender, string e)
@@ -744,6 +772,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             //Host.StartRinging();
             StatusText = _translator.Translate("Incoming call from {0} ...", e);
             CallInProgress = true;
+            _wasIncoming = true;
             if (ui.CurrentPage != this)
             {
                 //todo ShowWindow();
@@ -990,5 +1019,7 @@ namespace Panacea.Modules.Telephone.ViewModels
         public ICommand SpeedDialCallCommand { get; }
 
         public ICommand HangUpCommand { get; }
+
+        public AsyncCommand RemoveCallHistoryItemCommand { get; }
     }
 }

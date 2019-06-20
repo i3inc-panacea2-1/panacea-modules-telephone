@@ -562,7 +562,6 @@
                                                                 Grid.Column="1"
                                                                 HorizontalContentAlignment="Left"
                                                                 Background="Transparent"
-                                                                Style="{DynamicResource stylessWithBackground}"
                                                                 Tag="{Binding}">
                                                                 <TextBlock
                                                                     Margin="10"
@@ -607,15 +606,15 @@
                                                                 Name="remove"
                                                                 Grid.Row="0"
                                                                 Grid.Column="4"
-                                                                Style="{DynamicResource styless}"
-                                                                Tag="{Binding}">
-                                                                <TextBlock
+                                                                controls:Material.AsyncCommand="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.RemoveCallHistoryItemCommand}"
+                                                                CommandParameter="{Binding}">
+                                                                <controls:MaterialIcon
                                                                     Padding="20"
                                                                     HorizontalAlignment="Center"
                                                                     VerticalAlignment="Center"
                                                                     controls:Material.RelativeFontSizeRatio="1.1"
                                                                     Foreground="#222222"
-                                                                    Text="X" />
+                                                                    Icon="close" />
                                                             </Button>
                                                             <Border
                                                                 Grid.Row="1"

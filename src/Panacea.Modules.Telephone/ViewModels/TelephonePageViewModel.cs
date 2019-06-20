@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Panacea.Modules.Telephone.ViewModels
@@ -21,6 +22,7 @@ namespace Panacea.Modules.Telephone.ViewModels
     [View(typeof(TelephonePage))]
     class TelephonePageViewModel : ViewModelBase
     {
+        const string TELEPHONE = "Telephone";
         private readonly PanaceaServices _core;
         private TelephoneBase _terminalPhone, _userPhone;
         bool _autoRejected, _wasIncoming;
@@ -30,6 +32,7 @@ namespace Panacea.Modules.Telephone.ViewModels
         Translator _translator = new Translator("Telephone");
         Service _currentService;
 
+        IServiceMonitor _serviceMonitor;
         public TelephonePageViewModel(PanaceaServices core)
         {
             _core = core;
@@ -196,8 +199,8 @@ namespace Panacea.Modules.Telephone.ViewModels
                 if (_core.TryGetBilling(out IBillingManager billing))
                 {
                     hasService = _core.UserService.User.Id != null
-                        && (await billing.GetServiceForQuantityAsync("Telephone")) != null;
-                    isFree = billing.IsPluginFree("Telephone");
+                        && (await billing.GetServiceForQuantityAsync(TELEPHONE)) != null;
+                    isFree = billing.IsPluginFree(TELEPHONE);
                 }
                 if (_core.UserService.User.Id == null)
                 {
@@ -260,6 +263,25 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         }
 
+        void StartServiceMonitor(Service service)
+        {
+            if (_serviceMonitor != null)
+            {
+                _serviceMonitor.StopMonitor();
+            }
+
+            if (_core.TryGetBilling(out IBillingManager bill))
+            {
+                _serviceMonitor = bill.CreateServiceMonitor();
+                _serviceMonitor.ServiceExpired += _serviceMonitor_ServiceExpired;
+                _serviceMonitor.Monitor(service);
+            }
+        }
+
+        private void _serviceMonitor_ServiceExpired(object sender, Service e)
+        {
+            _currentPhone?.HangUp();
+        }
 
         private async Task Call(string number2, bool video = false)
         {
@@ -278,7 +300,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 var forceVideo = _terminalSpeedDials.First(d => d.Number == number2).VideoCall;
                 await CallWithLine(_terminalPhone, number2, forceVideo || video);
             }
-            else if (!_settings.Settings.RequiresUserSignedIn && (!_core.TryGetBilling(out IBillingManager bill) || bill.IsPluginFree("Telephone")))
+            else if (!_settings.Settings.RequiresUserSignedIn && (!_core.TryGetBilling(out IBillingManager bill) || bill.IsPluginFree(TELEPHONE)))
             {
 
                 if (_core.UserService.User.Id == null && _terminalPhone != null)
@@ -305,7 +327,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                         }
                     }
 
-                    if (_core.TryGetBilling(out IBillingManager billing) && billing.IsPluginFree("Telephone"))
+                    if (_core.TryGetBilling(out IBillingManager billing) && billing.IsPluginFree(TELEPHONE))
                     {
                         if (_core.UserService.User.Id == null || _userPhone == null)
                             await CallWithLine(_terminalPhone, number2, video);
@@ -318,8 +340,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                             if (_core.TryGetBilling(out IBillingManager billing2))
                             {
-                                var service = await billing.GetOrRequestServiceAsync("Telephone requires service.", "Telephone");
-
+                                var service = await billing.GetOrRequestServiceAsync("Telephone requires service.", TELEPHONE);
+                                _currentService = null;
                                 if (service != null)
                                 {
                                     if (service.Quantity == -1 || service.Quantity > 0)
@@ -334,10 +356,6 @@ namespace Panacea.Modules.Telephone.ViewModels
                                         _ = Call(number2, video);
                                     }
 
-                                }
-                                else
-                                {
-                                    _ = Call(number2, video);
                                 }
                             }
                         }
@@ -492,6 +510,11 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 _callInProgress = value;
                 OnPropertyChanged();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    CallInProgressAnswerCommand.RaiseCanExecuteChanged();
+                    CallInProgressVideoAnswerCommand.RaiseCanExecuteChanged();
+                });
             }
         }
 
@@ -661,12 +684,17 @@ namespace Panacea.Modules.Telephone.ViewModels
         private async void Telephone_Closed(object sender, string e)
         {
             OnCallEnded();
+
+            await ConsumeAsync();
+            _currentService = null;
             await AddCallLogItem((_wasIncoming) ? CallDirection.Incoming : CallDirection.Outgoing, CallStatus.Successful, e,
                 _callStart, _callEnd);
+
         }
 
         void OnCallEnded()
         {
+           
             _callEnd = DateTime.Now;
             CallInProgress = false;
             StopCount();
@@ -693,8 +721,8 @@ namespace Panacea.Modules.Telephone.ViewModels
             var hasService = true;
             if (_core.UserService.User.Id != null && _core.TryGetBilling(out IBillingManager billing))
             {
-                hasService = billing.IsPluginFree("Telephone")
-                    || (await billing.GetActiveUserServicesAsync()).Any(s => s.Plugin == "Telephone");
+                hasService = billing.IsPluginFree(TELEPHONE)
+                    || (await billing.GetActiveUserServicesAsync()).Any(s => s.Plugin == TELEPHONE);
             }
 
 
@@ -752,9 +780,9 @@ namespace Panacea.Modules.Telephone.ViewModels
                     return;
                 }
             }
-            if ((sender == _userPhone && _terminalPhone.IsBusy) || (sender == _terminalPhone && _userPhone.IsBusy))
+            if ((telephone == _userPhone && _terminalPhone.IsBusy) || (telephone == _terminalPhone && _userPhone.IsBusy))
             {
-                if (sender == _userPhone) await _userPhone.Reject();
+                if (telephone == _userPhone) await _userPhone.Reject();
                 else await _terminalPhone.Reject();
                 return;
             }
@@ -770,9 +798,11 @@ namespace Panacea.Modules.Telephone.ViewModels
             //todo decline.Visibility = Visibility.Visible;
 
             //Host.StartRinging();
+            _currentPhone = telephone;
             StatusText = _translator.Translate("Incoming call from {0} ...", e);
-            CallInProgress = true;
             _wasIncoming = true;
+            CallInProgress = true;
+
             if (ui.CurrentPage != this)
             {
                 //todo ShowWindow();
@@ -838,17 +868,38 @@ namespace Panacea.Modules.Telephone.ViewModels
                             }
 
                         }
+                        if (_inCallSeconds >= 60)
+                        {
+                            await ConsumeAsync();
+                        }
                     }
                     catch
                     {
                     }
                 };
             }
+            if(_currentService != null)
+            {
+                StartServiceMonitor(_currentService);
+            }
             _counter.Start();
+        }
+
+        async Task ConsumeAsync()
+        {
+            if (_currentService == null) return;
+            var seconds = _inCallSeconds;
+
+            if (_core.TryGetBilling(out IBillingManager bill)
+            && await bill.ConsumeQuantityAsync(TELEPHONE, (int)Math.Ceiling(TimeSpan.FromSeconds(_inCallSeconds).TotalMinutes))) ;
+            {
+                _inCallSeconds -= seconds;
+            }
         }
 
         private void StopCount()
         {
+            _serviceMonitor?.StopMonitor();
             if (_counter == null) return;
             _counter.Stop();
             _counter.Enabled = false;
@@ -1002,19 +1053,19 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public ICommand CallInProgressKeyPressCommand { get; }
 
-        public ICommand CallInProgressAnswerCommand { get; }
+        public RelayCommand CallInProgressAnswerCommand { get; }
 
-        public ICommand CallInProgressVideoAnswerCommand { get; }
+        public RelayCommand CallInProgressVideoAnswerCommand { get; }
 
         public ICommand CallInProgressMuteCommand { get; }
 
         public ICommand CallInProgressUnmuteCommand { get; }
 
-        public ICommand DialPadBackspaceCommand { get; }
+        public RelayCommand DialPadBackspaceCommand { get; }
 
-        public ICommand DialPadAudioCallCommand { get; }
+        public RelayCommand DialPadAudioCallCommand { get; }
 
-        public ICommand DialPadVideoCallCommand { get; }
+        public RelayCommand DialPadVideoCallCommand { get; }
 
         public ICommand SpeedDialCallCommand { get; }
 

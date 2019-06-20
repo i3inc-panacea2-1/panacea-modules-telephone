@@ -562,7 +562,8 @@
                                                                 Grid.Column="1"
                                                                 HorizontalContentAlignment="Left"
                                                                 Background="Transparent"
-                                                                Tag="{Binding}">
+                                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SpeedDialCallCommand}"
+                                                                CommandParameter="{Binding Number}">
                                                                 <TextBlock
                                                                     Margin="10"
                                                                     HorizontalAlignment="Left"

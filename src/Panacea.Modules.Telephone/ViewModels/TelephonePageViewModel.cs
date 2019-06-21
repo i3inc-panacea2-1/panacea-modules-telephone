@@ -24,6 +24,7 @@ namespace Panacea.Modules.Telephone.ViewModels
     {
         const string TELEPHONE = "Telephone";
         private readonly PanaceaServices _core;
+        private readonly ObservableCollection<LiveTileFrame> _tiles;
         private TelephoneBase _terminalPhone, _userPhone;
         bool _autoRejected, _wasIncoming;
         private ObservableCollection<SpeedDial> _terminalSpeedDials;
@@ -33,9 +34,10 @@ namespace Panacea.Modules.Telephone.ViewModels
         Service _currentService;
 
         IServiceMonitor _serviceMonitor;
-        public TelephonePageViewModel(PanaceaServices core)
+        public TelephonePageViewModel(PanaceaServices core, ObservableCollection<LiveTileFrame> tiles)
         {
             _core = core;
+            _tiles = tiles;
             DialPadKeyPressCommand = new RelayCommand(args =>
             {
                 var character = args.ToString();
@@ -270,6 +272,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                     CurrentNumber = _settings.TerminalAccount?.DisplayNumber;
                     CurrentNumberSelectedIndex = 1;
+                    _tiles.Clear();
+                    _tiles.Add(new LiveTileFrame(new TileYourNumberIsViewModel(CurrentNumber), 5000));
                     //tile1.number = resp.TerminalAccount?.DisplayNumber;
                     //_myButton?.Frames.Add(tile1);
                 }
@@ -278,6 +282,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                     CurrentNumber = _settings.UserAccount?.DisplayNumber;
                     CurrentNumberSelectedIndex = 1;
+                    _tiles.Clear();
+                    _tiles.Add(new LiveTileFrame(new TileYourNumberIsViewModel(CurrentNumber), 5000));
                     //tile1.number = _settings.UserAccount?.DisplayNumber;
                     //_myButton?.Frames.Add(tile1);
                 }
@@ -988,6 +994,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 source.TrySetResult(null);
                 _loadingTask = null;
             }
+            await UpdateTelephoneLabel();
         }
         private async Task GetUserDialsAsync()
         {

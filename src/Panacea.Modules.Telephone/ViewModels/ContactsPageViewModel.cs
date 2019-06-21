@@ -84,14 +84,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 {
                     Contacts.Remove(c);
                 }
-                var regex = new Regex(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}");
-                foreach(var d in Contacts)
-                {
-                    if (!regex.IsMatch(d.Number))
-                    {
-                        return;
-                    }
-                }
+                
                 if (core.TryGetUiManager(out IUiManager ui))
                 {
                     try

@@ -16,7 +16,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
-           
+
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock
@@ -35,8 +35,8 @@
             TextWrapping="Wrap" />
         <Button
             Grid.Row="2"
-            HorizontalAlignment="Center"
             Margin="10"
+            HorizontalAlignment="Center"
             mi:Material.Icon="add"
             Command="{Binding AddContactCommand}"
             Content="{multilinguality:Translate 'Add new contact',
@@ -132,7 +132,7 @@
             </ItemsControl>
 
         </Grid>
-        
+
         <UniformGrid
             Grid.Row="4"
             Margin="10"

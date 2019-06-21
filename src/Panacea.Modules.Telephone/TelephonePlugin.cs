@@ -8,22 +8,27 @@ using Panacea.Modules.Telephone.ViewModels;
 using Panacea.Multilinguality;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Panacea.Modules.Telephone
 {
-    class TelephonePlugin : ITelephonePlugin, ICallablePlugin
+    class TelephonePlugin : ITelephonePlugin, ICallablePlugin, ILiveTilesPlugin
     {
         private readonly PanaceaServices _core;
         GetVoipSettingsResponse _settings;
         TelephonePageViewModel _telephonePage;
         Translator _translator = new Translator("Telephone");
+
+        public ObservableCollection<LiveTileFrame> Frames { get; private set; }
+
         public TelephonePlugin(PanaceaServices core)
         {
             _core = core;
-            _telephonePage = new TelephonePageViewModel(core);
+            Frames = new ObservableCollection<LiveTileFrame>();
+            _telephonePage = new TelephonePageViewModel(core, Frames);
         }
 
         public Task BeginInit()

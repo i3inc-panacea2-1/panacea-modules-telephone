@@ -398,7 +398,7 @@
                                                             <RowDefinition Height="Auto" />
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="1*" />
                                                             <ColumnDefinition Width="5*" />
                                                         </Grid.ColumnDefinitions>
                                                         <Grid Grid.RowSpan="2">
@@ -495,9 +495,9 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                     <Button
-                                        Command="{Binding ManageContactsCommand}"
                                         Grid.Row="1"
                                         VerticalAlignment="Bottom"
+                                        Command="{Binding ManageContactsCommand}"
                                         Content="{multilinguality:Translate 'Manage your contacts',
                                                                             'Telephone'}"
                                         Style="{DynamicResource PrimaryButton}" />

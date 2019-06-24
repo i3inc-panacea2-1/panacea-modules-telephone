@@ -4,7 +4,6 @@
     xmlns:local="clr-namespace:Panacea.Modules.Telephone.Controls"
     xmlns:pcontrols="clr-namespace:Panacea.Controls;assembly=Panacea.Controls">
     <Style TargetType="{x:Type local:NumericButton}">
-        <Setter Property="pcontrols:Material.RelativeFontSizeRatio" Value="1.0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -36,7 +35,6 @@
                                     Content="{TemplateBinding Content}">
                                     <ContentPresenter.Resources>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="pcontrols:Material.RelativeFontSizeRatio" Value="2.8" />
                                             <Setter Property="Padding" Value="0" />
                                             <Setter Property="Margin" Value="3" />
                                             <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
@@ -48,7 +46,6 @@
                                     Grid.Column="1"
                                     Margin="3"
                                     VerticalAlignment="Bottom"
-                                    pcontrols:Material.RelativeFontSizeRatio="1.0"
                                     FontWeight="Light"
                                     LineHeight="{Binding ElementName=Presenter, Path=ActualHeight}"
                                     LineStackingStrategy="BlockLineHeight"

@@ -10,7 +10,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid mi:Material.RelativeFontSizeRatio="1.0" Background="#f3f3f3">
+    <Grid Background="#f3f3f3">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="auto" />
@@ -21,14 +21,14 @@
         </Grid.RowDefinitions>
         <TextBlock
             Margin="10"
-            mi:Material.RelativeFontSizeRatio="1.3"
+            FontSize="{DynamicResource FontSize-X-Large}"
             Text="{multilinguality:Translate 'Manage your speed dials',
                                              'Telephone'}"
             TextAlignment="Center" />
         <TextBlock
             Grid.Row="1"
             HorizontalAlignment="Center"
-            mi:Material.RelativeFontSizeRatio="1.1"
+            FontSize="{DynamicResource FontSize-Large}"
             Foreground="#999999"
             Text="{Binding HelpText}"
             TextAlignment="Center"
@@ -68,7 +68,7 @@
                                     Margin="2"
                                     mi:Material.Label="{multilinguality:Translate 'Name',
                                                                                   'Telephone'}"
-                                    mi:Material.RelativeFontSizeRatio="1.1"
+                                    FontSize="{DynamicResource FontSize-Large}"
                                     MaxLength="12"
                                     Text="{Binding Label, Mode=TwoWay}" />
 
@@ -77,7 +77,7 @@
                                     Margin="2"
                                     mi:Material.Label="{multilinguality:Translate 'Number',
                                                                                   'Telephone'}"
-                                    mi:Material.RelativeFontSizeRatio="1.1"
+                                    FontSize="{DynamicResource FontSize-Large}"
                                     MaxLength="15"
                                     Text="{Binding Number, Mode=TwoWay}" />
                                 <UniformGrid

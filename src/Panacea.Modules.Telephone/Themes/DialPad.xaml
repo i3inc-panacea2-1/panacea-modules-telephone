@@ -58,7 +58,7 @@
                                     <TextBlock
                                         Name="NumberText"
                                         Margin="15"
-                                        pcontrols:Material.RelativeFontSizeRatio="2.8"
+                                        FontSize="{DynamicResource FontSize-Xx-Huge}"
                                         Foreground="White"
                                         Text="{TemplateBinding Number}" />
                                 </Viewbox>

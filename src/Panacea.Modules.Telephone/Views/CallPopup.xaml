@@ -18,7 +18,7 @@
             </Grid.RowDefinitions>
             <TextBlock
                 Margin="20"
-                mi:Material.RelativeFontSizeRatio="1.1"
+                FontSize="{DynamicResource FontSize-Large}"
                 Text="{Binding Message.Text}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />

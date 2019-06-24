@@ -16,7 +16,7 @@
                         <ControlTemplate.Resources>
                             <BooleanToVisibilityConverter x:Key="BoolToVis" />
                         </ControlTemplate.Resources>
-                        <Grid controls:Material.RelativeFontSizeRatio="1.0" Background="{TemplateBinding Background}">
+                        <Grid Background="{TemplateBinding Background}">
                             <Viewbox Stretch="Fill">
                                 <Grid Name="VideoRemoteHost" />
                             </Viewbox>
@@ -66,7 +66,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Padding="5"
-                                        controls:Material.RelativeFontSizeRatio="1.8"
+                                        FontSize="{DynamicResource FontSize-Xxx-Large}"
                                         Background="#77000000"
                                         Foreground="White"
                                         Text="{TemplateBinding CurrentNumber}"
@@ -74,7 +74,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Padding="2"
-                                        controls:Material.RelativeFontSizeRatio="1.3"
+                                       FontSize="{DynamicResource FontSize-Xx-Large}"
                                         Background="#77559CDC"
                                         Foreground="White"
                                         Text="{TemplateBinding StatusText}"
@@ -112,7 +112,7 @@
                                     <StackPanel.Resources>
                                         <Style BasedOn="{StaticResource PrimaryButton}" TargetType="Button">
 
-                                            <Setter Property="controls:Material.RelativeFontSizeRatio" Value="2.0" />
+                                            <Setter Property="TextElement.FontSize" Value="{DynamicResource FontSize-Huge}" />
                                             <Setter Property="Margin" Value="2" />
                                             <Setter Property="Padding" Value="15,5" />
                                             <Setter Property="Foreground" Value="White" />

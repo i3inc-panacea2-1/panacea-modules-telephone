@@ -10,6 +10,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBlock Foreground="White" TextAlignment="Center" FontSize="{DynamicResource FontSize-Small}" Text="{multilinguality:Translate 'Your number is', 'Telephone'}" />
-        <TextBlock Foreground="White" TextAlignment="Center" FontSize="{DynamicResource FontSize-Xx-Large}" Text="{Binding Number}"/>
+        <TextBlock Foreground="White" TextAlignment="Center" FontSize="{DynamicResource FontSize-X-Large}" Text="{Binding Number}"/>
     </StackPanel>
 </UserControl>

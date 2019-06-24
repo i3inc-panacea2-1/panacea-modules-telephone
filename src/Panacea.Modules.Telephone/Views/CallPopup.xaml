@@ -8,8 +8,8 @@
     xmlns:mi="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
     xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
     d:DesignWidth="800"
-    mc:Ignorable="d"
-    Background="White">
+    Background="White"
+    mc:Ignorable="d">
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
@@ -29,7 +29,7 @@
                     Command="{Binding CallCommand}"
                     Content="{multilinguality:Translate 'Call',
                                                         'Telephone'}"
-                    Style="{DynamicResource PrimaryButton}"/>
+                    Style="{DynamicResource PrimaryButton}" />
                 <Button
                     Name="btnCancel"
                     HorizontalAlignment="Left"

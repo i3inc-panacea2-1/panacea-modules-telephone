@@ -28,13 +28,15 @@
                                 </Grid.ColumnDefinitions>
 
                                 <ContentPresenter
-                                    Margin="0"
                                     Name="Presenter"
+                                    Margin="0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Bottom"
                                     Content="{TemplateBinding Content}">
                                     <ContentPresenter.Resources>
                                         <Style TargetType="TextBlock">
+                                            <Setter Property="FontSize" Value="{DynamicResource FontSize-Xxx-Huge}" />
+                                            <Setter Property="LineHeight" Value="{DynamicResource FontSize-Xxx-Huge}" />
                                             <Setter Property="Padding" Value="0" />
                                             <Setter Property="Margin" Value="3" />
                                             <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
@@ -46,6 +48,7 @@
                                     Grid.Column="1"
                                     Margin="3"
                                     VerticalAlignment="Bottom"
+                                    FontSize="{DynamicResource FontSize-Normal}"
                                     FontWeight="Light"
                                     LineHeight="{Binding ElementName=Presenter, Path=ActualHeight}"
                                     LineStackingStrategy="BlockLineHeight"

@@ -1,6 +1,7 @@
 ﻿using Panacea.Core;
 using Panacea.Modularity;
 using Panacea.Modularity.Billing;
+using Panacea.Modularity.Hardware;
 using Panacea.Modularity.Telephone;
 using Panacea.Modularity.UiManager;
 using Panacea.Modules.Telephone.Models;
@@ -49,10 +50,18 @@ namespace Panacea.Modules.Telephone
         public Task EndInit()
         {
             _ = _telephonePage.GetSettingsAsync();
+            var hw = _core.GetHardwareManager();
+            hw.HandsetStateChanged += Hw_HandsetStateChanged;
             return Task.CompletedTask;
         }
 
-      
+        private void Hw_HandsetStateChanged(object sender, HardwareStatus e)
+        {
+            if(_core.TryGetUiManager(out IUiManager ui))
+            {
+                Call();
+            }
+        }
 
         public void Call()
         {

@@ -66,7 +66,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Padding="5"
-                                        FontSize="{DynamicResource FontSize-Xxx-Large}"
+                                        FontSize="{DynamicResource FontSize-X-Huge}"
                                         Background="#77000000"
                                         Foreground="White"
                                         Text="{TemplateBinding CurrentNumber}"
@@ -74,7 +74,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Padding="2"
-                                       FontSize="{DynamicResource FontSize-Xx-Large}"
+                                       FontSize="{DynamicResource FontSize-X-Large}"
                                         Background="#77559CDC"
                                         Foreground="White"
                                         Text="{TemplateBinding StatusText}"

@@ -11,6 +11,7 @@ using Panacea.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,10 @@ namespace Panacea.Modules.Telephone.ViewModels
                     {
                         Number = "+" + Number.Substring(2, Number.Length - 2);
                     }
+                }
+                else if (character == "*" || character == "#")
+                {
+                    Number += character.ToString();
                 }
             });
             DialPadBackspaceCommand = new RelayCommand(args =>
@@ -156,7 +161,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                         var vm = new ContactsPageViewModel(_userSpeedDials, source, _core);
                         ui.Navigate(vm, false);
                         var res = await source.Task;
-                        if(ui.CurrentPage != this)
+                        if (ui.CurrentPage != this)
                         {
                             ui.Navigate(this);
                         }
@@ -192,6 +197,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public override async void Activate()
         {
+
             if (_loadingTask != null)
             {
                 await _loadingTask;
@@ -210,6 +216,11 @@ namespace Panacea.Modules.Telephone.ViewModels
                 //Host.ThemeManager.Toast("Telephone is not configured. Please contact the administrator.");
                 //Host.GoBack();
             }
+            if (_core.TryGetUiManager(out IUiManager ui2))
+            {
+                ui2.PreviewKeyDown += Ui_PreviewKeyDown;
+            }
+
             //var nots = _notifications.ToList();
             //_notifications.Clear();
             //foreach (var c in nots)
@@ -221,6 +232,36 @@ namespace Panacea.Modules.Telephone.ViewModels
             //Gma.UserActivityMonitor.HookManager.KeyUp -= HookManager_KeyUp2;
             //Gma.UserActivityMonitor.HookManager.KeyDown += HookManager_KeyDown2;
             //Gma.UserActivityMonitor.HookManager.KeyUp += HookManager_KeyUp2;
+        }
+
+        public override void Deactivate()
+        {
+            if (_core.TryGetUiManager(out IUiManager ui2))
+            {
+                ui2.PreviewKeyDown -= Ui_PreviewKeyDown;
+            }
+        }
+
+        private void Ui_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.Key == Key.D3 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                DialPadKeyPressCommand?.Execute("#");
+            }
+            else if (e.Key == Key.Multiply || (e.Key == Key.D8 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift))
+            {
+                DialPadKeyPressCommand?.Execute("*");
+            }
+            else if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
+            {
+                DialPadKeyPressCommand?.Execute(e.Key.ToString().Replace("D", "".Replace("NumPad", "")));
+            }
+            else if (e.Key == Key.Back)
+            {
+                DialPadBackspaceCommand?.Execute(null);
+            }
+            
         }
 
         private async Task UpdateTelephoneLabel()

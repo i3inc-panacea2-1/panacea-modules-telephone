@@ -121,6 +121,7 @@
     <Compile Include="TelephonePlugin.cs" />
     <Compile Include="ViewModels\CallPopupViewModel.cs" />
     <Compile Include="ViewModels\ContactsPageViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\TelephonePageViewModel.cs" />
     <Compile Include="ViewModels\TileYourNumberIsViewModel.cs" />
     <Compile Include="Views\CallPopup.xaml.cs">
@@ -128,6 +129,9 @@
     </Compile>
     <Compile Include="Views\ContactsPage.xaml.cs">
       <DependentUpon>ContactsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NavigationButton.xaml.cs">
+      <DependentUpon>NavigationButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TelephonePage.xaml.cs">
       <DependentUpon>TelephonePage.xaml</DependentUpon>
@@ -202,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ContactsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NavigationButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,7 +22,7 @@ namespace Panacea.Modules.Telephone
         GetVoipSettingsResponse _settings;
         TelephonePageViewModel _telephonePage;
         Translator _translator = new Translator("Telephone");
-
+        NavigationButtonViewModel _navButton;
         public ObservableCollection<LiveTileFrame> Frames { get; private set; }
 
         public TelephonePlugin(PanaceaServices core)
@@ -44,6 +44,10 @@ namespace Panacea.Modules.Telephone
 
         public Task Shutdown()
         {
+            if (_navButton != null && _core.TryGetUiManager(out IUiManager ui))
+            {
+                ui.RemoveNavigationBarControl(_navButton);
+            }
             return Task.CompletedTask;
         }
 
@@ -52,6 +56,11 @@ namespace Panacea.Modules.Telephone
             _ = _telephonePage.GetSettingsAsync();
             var hw = _core.GetHardwareManager();
             hw.HandsetStateChanged += Hw_HandsetStateChanged;
+            if(_core.TryGetUiManager(out IUiManager ui))
+            {
+                _navButton = new NavigationButtonViewModel();
+                ui.AddNavigationBarControl(_navButton);
+            }
             return Task.CompletedTask;
         }
 

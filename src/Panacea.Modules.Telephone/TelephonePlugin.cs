@@ -1,5 +1,6 @@
 ﻿using Panacea.Core;
 using Panacea.Modularity;
+using Panacea.Modularity.AppBar;
 using Panacea.Modularity.Billing;
 using Panacea.Modularity.Hardware;
 using Panacea.Modularity.Telephone;
@@ -56,17 +57,18 @@ namespace Panacea.Modules.Telephone
             _ = _telephonePage.GetSettingsAsync();
             var hw = _core.GetHardwareManager();
             hw.HandsetStateChanged += Hw_HandsetStateChanged;
-            if(_core.TryGetUiManager(out IUiManager ui))
+            if (_core.TryGetUiManager(out IUiManager ui))
             {
                 _navButton = new NavigationButtonViewModel();
                 ui.AddNavigationBarControl(_navButton);
             }
+            
             return Task.CompletedTask;
         }
 
         private void Hw_HandsetStateChanged(object sender, HardwareStatus e)
         {
-            if(_core.TryGetUiManager(out IUiManager ui))
+            if (_core.TryGetUiManager(out IUiManager ui))
             {
                 Call();
             }
@@ -74,8 +76,8 @@ namespace Panacea.Modules.Telephone
 
         public void Call()
         {
-            
-            if(_core.TryGetUiManager(out IUiManager ui))
+
+            if (_core.TryGetUiManager(out IUiManager ui))
             {
                 if (_telephonePage != null)
                 {
@@ -90,7 +92,7 @@ namespace Panacea.Modules.Telephone
 
         public void Call(string number)
         {
-            
+
         }
     }
 }

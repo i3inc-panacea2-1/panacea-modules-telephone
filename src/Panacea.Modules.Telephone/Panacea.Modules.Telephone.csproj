@@ -90,6 +90,7 @@
     <Compile Include="Controls\CallInProgressControl.cs" />
     <Compile Include="Controls\DialPad.cs" />
     <Compile Include="Controls\NumericButton.cs" />
+    <Compile Include="Converters\NotBooleanToVisibilityConverter.cs" />
     <Compile Include="Models\ButtonAppearance.cs" />
     <Compile Include="Models\CallDirection.cs" />
     <Compile Include="Models\CallLogItem.cs" />
@@ -119,16 +120,23 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TelephonePlugin.cs" />
+    <Compile Include="ViewModels\AppBarControlViewModel.cs" />
     <Compile Include="ViewModels\CallPopupViewModel.cs" />
     <Compile Include="ViewModels\ContactsPageViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\TelephonePageViewModel.cs" />
     <Compile Include="ViewModels\TileYourNumberIsViewModel.cs" />
+    <Compile Include="Views\AppBarControl.xaml.cs">
+      <DependentUpon>AppBarControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CallPopup.xaml.cs">
       <DependentUpon>CallPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ContactsPage.xaml.cs">
       <DependentUpon>ContactsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MiniTelephone.xaml.cs">
+      <DependentUpon>MiniTelephone.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NavigationButton.xaml.cs">
       <DependentUpon>NavigationButton.xaml</DependentUpon>
@@ -160,6 +168,9 @@
     </PackageReference>
     <PackageReference Include="Panacea.Modularity">
       <Version>0.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Panacea.Modularity.AppBar">
+      <Version>0.0.1</Version>
     </PackageReference>
     <PackageReference Include="Panacea.Modularity.Billing">
       <Version>5.0.0</Version>
@@ -201,11 +212,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AppBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CallPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ContactsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MiniTelephone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

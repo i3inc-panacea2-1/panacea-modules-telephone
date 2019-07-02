@@ -1,5 +1,6 @@
 ﻿using Panacea.Controls;
 using Panacea.Core;
+using Panacea.Modularity.AppBar;
 using Panacea.Modularity.Billing;
 using Panacea.Modularity.Telephone;
 using Panacea.Modularity.UiManager;
@@ -21,7 +22,7 @@ using System.Windows.Input;
 namespace Panacea.Modules.Telephone.ViewModels
 {
     [View(typeof(TelephonePage))]
-    class TelephonePageViewModel : ViewModelBase
+    public class TelephonePageViewModel : ViewModelBase
     {
         const string TELEPHONE = "Telephone";
         private readonly PanaceaServices _core;
@@ -261,7 +262,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 DialPadBackspaceCommand?.Execute(null);
             }
-            
+
         }
 
         private async Task UpdateTelephoneLabel()
@@ -361,7 +362,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             _currentPhone?.HangUp();
         }
 
-        private async Task Call(string number2, bool video = false)
+        internal async Task Call(string number2, bool video = false)
         {
             if (_terminalPhone?.IsBusy == true || _userPhone?.IsBusy == true) return;
 
@@ -984,7 +985,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             _counter.Dispose();
             _counter = null;
         }
-
+        AppBarControlViewModel _appBar;
         Task _loadingTask;
         internal async Task GetSettingsAsync()
         {
@@ -1006,7 +1007,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                         .Categories
                         .Telephone
                         .SpeedDialCategories
-                        .SelectMany(s => s.SpeedDials.Select(sd => sd.SpeedDial)).ToList());
+                        .SelectMany(s => s.SpeedDials.Where(d => d.SpeedDial.Visible).Select(sd => sd.SpeedDial)).ToList());
                 if (TerminalAccount?.Compare(_settings.TerminalAccount) != true)
                 {
                     TerminalAccount = _settings.TerminalAccount;
@@ -1017,7 +1018,23 @@ namespace Panacea.Modules.Telephone.ViewModels
                     UserAccount = _settings.UserAccount;
                     _userPhone = await RegisterPhone(UserAccount, _userPhone);
                 }
+                var dials = _settings
+                        .Categories
+                        .Telephone
+                        .SpeedDialCategories
+                        .SelectMany(s => s.SpeedDials.Select(sd => sd.SpeedDial)).ToList();
+                if (_appBar == null && _core.TryGetAppBar(out IAppBar bar))
+                {
 
+                    _appBar = new AppBarControlViewModel();
+                    _appBar.SpeedDials = dials;
+                    _appBar.TelephonePage = this;
+                    bar.AddButton(_appBar);
+                }
+                else if (_appBar != null)
+                {
+                    _appBar.SpeedDials = dials;
+                }
                 if (_core.UserService.User.Id != null)
                 {
                     await GetUserInfoAsync();

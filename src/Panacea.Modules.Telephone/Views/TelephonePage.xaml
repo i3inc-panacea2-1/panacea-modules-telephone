@@ -186,7 +186,7 @@
             </Setter>
         </Style>
         <Style TargetType="TabItem">
-            <Setter Property="FontSize" Value="{DynamicResource FontSize-Normal}" />
+            <Setter Property="FontSize" Value="{DynamicResource FontSize-Large}" />
             <Setter Property="Template">
 
                 <Setter.Value>

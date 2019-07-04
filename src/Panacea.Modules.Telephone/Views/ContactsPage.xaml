@@ -147,13 +147,12 @@
             Grid.Row="4"
             Margin="10"
             HorizontalAlignment="Center">
-
+            <Button Command="{Binding CancelCommand}" Content="{multilinguality:Translate 'Back', 'Telephone'}" />
             <Button
                 mi:Material.AsyncCommand="{Binding SaveCommand}"
                 Content="{multilinguality:Translate 'Save',
                                                     'Telephone'}"
                 Style="{DynamicResource PrimaryButton}" />
-            <Button Command="{Binding CancelCommand}" Content="{multilinguality:Translate 'Back', 'Telephone'}" />
         </UniformGrid>
     </Grid>
 </UserControl>

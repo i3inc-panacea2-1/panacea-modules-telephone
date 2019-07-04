@@ -54,6 +54,8 @@ namespace Panacea.Modules.Telephone
 
         public Task EndInit()
         {
+            _core.UserService.UserLoggedIn += UserService_UserLoggedIn;
+            _core.UserService.UserLoggedOut += UserService_UserLoggedOut;
             _ = _telephonePage.GetSettingsAsync();
             var hw = _core.GetHardwareManager();
             hw.HandsetStateChanged += Hw_HandsetStateChanged;
@@ -64,6 +66,16 @@ namespace Panacea.Modules.Telephone
             }
             
             return Task.CompletedTask;
+        }
+
+        private async Task UserService_UserLoggedOut(IUser user)
+        {
+            await _telephonePage.GetSettingsAsync();
+        }
+
+        private async Task UserService_UserLoggedIn(IUser user)
+        {
+            await _telephonePage.GetSettingsAsync();
         }
 
         private void Hw_HandsetStateChanged(object sender, HardwareStatus e)

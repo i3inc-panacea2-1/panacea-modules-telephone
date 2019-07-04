@@ -306,7 +306,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                         CurrentServiceSelectedIndex = 1; //BuyServicesAndSignInBlock
                     }
                 }
-
+                _tiles.Clear();
 
                 if (!string.IsNullOrEmpty(_settings.TerminalAccount?.Username) && !_settings.Settings.RequiresUserSignedIn ||
                     (string.IsNullOrEmpty(_settings.UserAccount?.Username) && _core.UserService.User.Id != null))
@@ -314,7 +314,6 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                     CurrentNumber = _settings.TerminalAccount?.DisplayNumber;
                     CurrentNumberSelectedIndex = 1;
-                    _tiles.Clear();
                     _tiles.Add(new LiveTileFrame(new TileYourNumberIsViewModel(CurrentNumber), 5000));
                     //tile1.number = resp.TerminalAccount?.DisplayNumber;
                     //_myButton?.Frames.Add(tile1);
@@ -324,7 +323,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                     CurrentNumber = _settings.UserAccount?.DisplayNumber;
                     CurrentNumberSelectedIndex = 1;
-                    _tiles.Clear();
+                    
                     _tiles.Add(new LiveTileFrame(new TileYourNumberIsViewModel(CurrentNumber), 5000));
                     //tile1.number = _settings.UserAccount?.DisplayNumber;
                     //_myButton?.Frames.Add(tile1);
@@ -529,12 +528,9 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 await telephone.Unregister();
                 telephone.Dispose();
-                return await CreatePhone(_terminalAccount);
+                
             }
-            else
-            {
-                return await CreatePhone(_terminalAccount);
-            }
+            return await CreatePhone(account);
         }
 
         public TelephoneAccount UserAccount
@@ -655,7 +651,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         }
 
-        private async Task<TelephoneBase> CreatePhone(TelephoneAccount account)
+        private async Task<TelephoneBase> CreatePhone(ITelephoneAccount account)
         {
             if (account == null) return null;
             TelephoneBase phone = null;

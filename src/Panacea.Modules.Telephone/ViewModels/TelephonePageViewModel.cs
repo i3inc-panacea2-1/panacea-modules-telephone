@@ -40,6 +40,20 @@ namespace Panacea.Modules.Telephone.ViewModels
         {
             _core = core;
             _tiles = tiles;
+            BuyServiceCommand = new RelayCommand(args =>
+            {
+                if(_core.TryGetBilling(out IBillingManager bill))
+                {
+                    bill.NavigateToBuyServiceWizard();
+                }
+            });
+            SignInCommand = new RelayCommand(args =>
+            {
+                if(_core.TryGetUserAccountManager(out IUserAccountManager user))
+                {
+                    user.LoginAsync();
+                }
+            });
             DialPadKeyPressCommand = new RelayCommand(args =>
             {
                 var character = args.ToString();
@@ -240,6 +254,13 @@ namespace Panacea.Modules.Telephone.ViewModels
             if (_core.TryGetUiManager(out IUiManager ui2))
             {
                 ui2.PreviewKeyDown -= Ui_PreviewKeyDown;
+                if(_userPhone?.IsBusy == true || _terminalPhone?.IsBusy == true)
+                {
+                    ui2.AddNavigationBarControl(new CallInProgressButtonViewModel()
+                    {
+                        TelephonePage = this
+                    });
+                }
             }
         }
 
@@ -297,7 +318,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 }
                 else
                 {
-                    if (isFree)
+                    if (isFree || hasService)
                     {
                         CurrentServiceSelectedIndex = 3; // empty
                     }
@@ -452,11 +473,20 @@ namespace Panacea.Modules.Telephone.ViewModels
         async Task CallWithLine(TelephoneBase telephone, string number, bool video = false)
         {
             StatusText = "";
+            _callStart = DateTime.Now.AddYears(100);
             _lastCallStartTime = DateTime.Now;
             //CallPage.LocalVideoVisibility = video ? Visibility.Visible : Visibility.Collapsed;
             //Host.AudioManager.MicrophoneVolume = 1;
             try
             {
+                if (_settings.Settings.DigitConfiguration?.Any() == true)
+                {
+                    var first = _settings.Settings.DigitConfiguration.FirstOrDefault(d => d.Length == number.Length);
+                    if(first!= null)
+                    {
+                        number = first.Digits + number;
+                    }
+                }
                 _currentPhone = telephone;
                 if (_core.TryGetUiManager(out IUiManager ui))
                 {
@@ -602,6 +632,10 @@ namespace Panacea.Modules.Telephone.ViewModels
             set
             {
                 _availabilityEnabled = value;
+                if (!AvailabilityEnabled && _core.TryGetUiManager(out IUiManager ui))
+                {
+                    ui.Toast(new Translator("Telephone").Translate("Your availability is set to OFF. You cannot receive incoming calls. Set your availability back on to receive incoming calls"));
+                }
                 OnPropertyChanged();
             }
         }
@@ -1035,6 +1069,11 @@ namespace Panacea.Modules.Telephone.ViewModels
                 {
                     await GetUserInfoAsync();
                 }
+                else
+                {
+                    UserSpeedDials = new ObservableCollection<UserSpeedDial>();
+                    CallHistory = new ObservableCollection<CallLogItem>();
+                }
             }
             catch (Exception ex)
             {
@@ -1070,6 +1109,18 @@ namespace Panacea.Modules.Telephone.ViewModels
         public async Task AddCallLogItem(CallDirection direction, CallStatus status, string number, DateTime callStart, DateTime callEnd)
         {
             if (string.IsNullOrEmpty(number)) return;
+            if (callStart > callEnd)
+            {
+                callStart = callEnd;
+            }
+            if (_settings.Settings.DigitConfiguration?.Any() == true)
+            {
+                var first = _settings.Settings.DigitConfiguration.FirstOrDefault(d => d.Length == number.Length - d.Digits.ToString().Length);
+                if (first != null)
+                {
+                    number = number.Substring(first.Digits.ToString().Length, first.Length);
+                }
+            }
             if (callStart == null) callStart = _lastCallStartTime;
             var display = number;
             var td = TerminalSpeedDials.FirstOrDefault(d => d.Number == number);
@@ -1158,5 +1209,9 @@ namespace Panacea.Modules.Telephone.ViewModels
         public AsyncCommand RemoveCallHistoryItemCommand { get; }
 
         public ICommand ManageContactsCommand { get; }
+
+        public ICommand BuyServiceCommand { get; }
+
+        public ICommand SignInCommand { get; }
     }
 }

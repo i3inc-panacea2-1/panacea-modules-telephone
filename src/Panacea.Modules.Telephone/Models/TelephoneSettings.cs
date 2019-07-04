@@ -37,5 +37,19 @@ namespace Panacea.Modules.Telephone.Models
         [DataMember(Name = "handsetKeyboards")]
         public string HandsetKeyboards { get; set; }
 
+        [DataMember(Name = "digitConfiguration")]
+        public List<DigitConfiguration> DigitConfiguration { get; set; }
+
+    }
+
+
+    [DataContract]
+    public class DigitConfiguration
+    {
+        [DataMember(Name = "length")]
+        public int Length { get; set; }
+
+        [DataMember(Name = "digits")]
+        public int Digits { get; set; }
     }
 }

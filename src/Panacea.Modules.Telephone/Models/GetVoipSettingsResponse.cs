@@ -22,5 +22,10 @@ namespace Panacea.Modules.Telephone.Models
 
         [DataMember(Name = "settings")]
         public TelephoneSettings Settings { get; set; }
+
+      
     }
+
+
+    
 }

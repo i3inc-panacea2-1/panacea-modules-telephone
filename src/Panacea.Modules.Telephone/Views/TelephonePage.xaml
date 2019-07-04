@@ -30,8 +30,8 @@
         </Style>
         <Style TargetType="{x:Type ToggleButton}">
             <Setter Property="Foreground" Value="Black" />
-            <Setter Property="Background" Value="#FAFAFB" />
-            <Setter Property="BorderBrush" Value="#EAEAEB" />
+            <Setter Property="Background" Value="#F44336" />
+            <Setter Property="BorderBrush" Value="#F14030" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
@@ -90,11 +90,11 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="Background.Color"
-                                                To="Green"
+                                                To="#4CAF50"
                                                 Duration="0:0:0.2" />
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="BorderBrush.Color"
-                                                To="DarkGreen"
+                                                To="#49A249"
                                                 Duration="0:0:0.2" />
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)">
                                                 <SplineDoubleKeyFrame KeyTime="0" Value="0" />
@@ -111,11 +111,11 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="Background.Color"
-                                                To="#FAFAFB"
+                                                To="#F44336"
                                                 Duration="0:0:0.2" />
                                             <ColorAnimation
                                                 Storyboard.TargetProperty="BorderBrush.Color"
-                                                To="#EAEAEB"
+                                                To="#F04031"
                                                 Duration="0:0:0.2" />
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)">
                                                 <SplineDoubleKeyFrame KeyTime="0" Value="15" />
@@ -288,11 +288,11 @@
                                     Foreground="#999999"
                                     TextWrapping="Wrap">
                                     <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
-                                    <Hyperlink>
+                                    <Hyperlink Command="{Binding BuyServiceCommand}">
                                         <TextBlock Text="{multilinguality:Translate 'Buy Services', 'Telephone'}" />
                                     </Hyperlink>
                                     <Run Text="{multilinguality:Translate 'or', 'Telephone'}" />
-                                    <Hyperlink>
+                                    <Hyperlink Command="{Binding SignInCommand}">
                                         <TextBlock Text="{multilinguality:Translate 'Sign in', 'Telephone'}" />
                                     </Hyperlink>
                                 </TextBlock>
@@ -305,7 +305,7 @@
                                     Foreground="#999999"
                                     TextWrapping="Wrap">
                                     <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
-                                    <Hyperlink>
+                                    <Hyperlink Command="{Binding BuyServiceCommand}">
                                         <TextBlock Text="{multilinguality:Translate 'Buy Services', 'Telephone'}" />
                                     </Hyperlink>
 
@@ -315,11 +315,11 @@
                                 <TextBlock
                                     Name="SignInBlock"
                                     HorizontalAlignment="Left"
-                                   FontSize="{DynamicResource FontSize-Small}"
+                                    FontSize="{DynamicResource FontSize-Small}"
                                     Foreground="#999999"
                                     TextWrapping="Wrap">
                                     <Run Text="{multilinguality:Translate 'Speed Dial &amp; Emergency Calls Only. To activate your extension', 'Telephone'}" />
-                                    <Hyperlink>
+                                    <Hyperlink Command="{Binding SignInCommand}">
                                         <TextBlock Text="{multilinguality:Translate 'Sign in', 'Telephone'}" />
                                     </Hyperlink>
                                 </TextBlock>
@@ -329,10 +329,11 @@
                         <Border Height="1" Background="#cccccc" />
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock
+                                Name="AvailabilityText"
                                 Margin="0,0,60,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -340,12 +341,16 @@
                                 Foreground="#777777"
                                 Text="{multilinguality:Translate 'Availability',
                                                                  'Telephone'}" />
+
                             <ToggleButton
                                 Grid.Column="1"
-                                HorizontalAlignment="Stretch"
+                                Height="{Binding ElementName=AvailabilityText, Path=ActualHeight}"
+                                HorizontalAlignment="Right"
                                 FontSize="{DynamicResource FontSize-Large}"
                                 Foreground="#555555"
                                 IsChecked="{Binding AvailabilityEnabled}" />
+
+
                         </Grid>
                         <Border Height="1" Background="#cccccc" />
                     </StackPanel>
@@ -443,7 +448,18 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <ItemsControl ItemsSource="{Binding UserSpeedDials}">
+                                    <ItemsControl
+                                        ItemsSource="{Binding UserSpeedDials}"
+                                        ScrollViewer.CanContentScroll="True"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl.Template>
+                                            <ControlTemplate>
+                                                <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+                                                    <ItemsPresenter />
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ItemsControl.Template>
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel />

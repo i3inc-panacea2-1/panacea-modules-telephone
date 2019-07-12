@@ -61,7 +61,7 @@ namespace Panacea.Modules.Telephone
             hw.HandsetStateChanged += Hw_HandsetStateChanged;
             if (_core.TryGetUiManager(out IUiManager ui))
             {
-                _navButton = new NavigationButtonViewModel();
+                _navButton = new NavigationButtonViewModel(_core);
                 ui.AddNavigationBarControl(_navButton);
             }
             

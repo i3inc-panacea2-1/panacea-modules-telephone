@@ -16,36 +16,39 @@ namespace Panacea.Modules.Telephone.ViewModels
     [View(typeof(NavigationButton))]
     class NavigationButtonViewModel:ViewModelBase
     {
-        DispatcherTimer ringTimer;
+  
         public NavigationButtonViewModel(PanaceaServices core)
         {
-            ringTimer = new DispatcherTimer();
-            ringTimer.Interval = TimeSpan.FromSeconds(5);
-            ringTimer.Tick += Timer_Tick;
             _core = core;
 
             if (_core.TryGetRelayManager(out IRelayManager relay))
             {
                 _relay = relay;
             }
-            ClickCommand = new RelayCommand(args =>
+
+            bool pressed = false;
+            ClickCommand = new RelayCommand(async args =>
             {
-                if (_relay!=null && _relay.NurseCallAttached)
+                if (pressed) return;
+                pressed = true;
+                try
                 {
-                    ringTimer.Start();
-                    _relay.SetNurseCallAsync(true);
+                    if (_relay != null && _relay.NurseCallAttached)
+                    {
+                        await _relay.SetNurseCallAsync(true);
+                        await Task.Delay(2000);
+                        await _relay.SetNurseCallAsync(false);
+                    }
                 }
+                finally
+                {
+                    pressed = false;
+                }
+               
             });
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-                if (_relay != null && _relay.NurseCallAttached)
-                {
-                    ringTimer.Stop();
-                    _relay.SetNurseCallAsync(false);
-                }
-        }
+
 
         private PanaceaServices _core;
         private IRelayManager _relay;

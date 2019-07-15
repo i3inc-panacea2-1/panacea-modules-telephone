@@ -24,7 +24,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             ringTimer.Tick += Timer_Tick;
             _core = core;
 
-            if (_core.GetRelayManager(out IRelayManager relay))
+            if (_core.TryGetRelayManager(out IRelayManager relay))
             {
                 _relay = relay;
             }

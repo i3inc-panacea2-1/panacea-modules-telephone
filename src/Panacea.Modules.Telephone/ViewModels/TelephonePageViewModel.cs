@@ -42,14 +42,14 @@ namespace Panacea.Modules.Telephone.ViewModels
             _tiles = tiles;
             BuyServiceCommand = new RelayCommand(args =>
             {
-                if(_core.TryGetBilling(out IBillingManager bill))
+                if (_core.TryGetBilling(out IBillingManager bill))
                 {
                     bill.NavigateToBuyServiceWizard();
                 }
             });
             SignInCommand = new RelayCommand(args =>
             {
-                if(_core.TryGetUserAccountManager(out IUserAccountManager user))
+                if (_core.TryGetUserAccountManager(out IUserAccountManager user))
                 {
                     user.LoginAsync();
                 }
@@ -254,7 +254,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             if (_core.TryGetUiManager(out IUiManager ui2))
             {
                 ui2.PreviewKeyDown -= Ui_PreviewKeyDown;
-                if(_userPhone?.IsBusy == true || _terminalPhone?.IsBusy == true)
+                if (_userPhone?.IsBusy == true || _terminalPhone?.IsBusy == true)
                 {
                     ui2.AddNavigationBarControl(new CallInProgressButtonViewModel()
                     {
@@ -344,7 +344,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
                     CurrentNumber = _settings.UserAccount?.DisplayNumber;
                     CurrentNumberSelectedIndex = 1;
-                    
+
                     _tiles.Add(new LiveTileFrame(new TileYourNumberIsViewModel(CurrentNumber), 5000));
                     //tile1.number = _settings.UserAccount?.DisplayNumber;
                     //_myButton?.Frames.Add(tile1);
@@ -482,7 +482,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 if (_settings.Settings.DigitConfiguration?.Any() == true)
                 {
                     var first = _settings.Settings.DigitConfiguration.FirstOrDefault(d => d.Length == number.Length);
-                    if(first!= null)
+                    if (first != null)
                     {
                         number = first.Digits + number;
                     }
@@ -558,7 +558,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 await telephone.Unregister();
                 telephone.Dispose();
-                
+
             }
             return await CreatePhone(account);
         }
@@ -889,7 +889,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                     return;
                 }
             }
-            if ((telephone == _userPhone && _terminalPhone.IsBusy) || (telephone == _terminalPhone && _userPhone.IsBusy))
+            if ((telephone == _userPhone && _terminalPhone?.IsBusy == true) || (telephone == _terminalPhone && _userPhone?.IsBusy == true))
             {
                 if (telephone == _userPhone) await _userPhone.Reject();
                 else await _terminalPhone.Reject();

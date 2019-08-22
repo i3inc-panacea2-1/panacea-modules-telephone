@@ -275,11 +275,22 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 DialPadKeyPressCommand?.Execute("*");
             }
+            else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && (e.Key == Key.D4 || e.Key == Key.D3))
+            {
+                if (e.Key == Key.D4)
+                {
+                    DialPadAudioCallCommand?.Execute(null);
+                }
+                else if (e.Key == Key.D3)
+                {
+                    HangUpCommand?.Execute(null);
+                }
+            }
             else if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
             {
                 DialPadKeyPressCommand?.Execute(e.Key.ToString().Replace("D", "".Replace("NumPad", "")));
             }
-            else if (e.Key == Key.Back)
+            else if (e.Key == Key.Back || e.Key == Key.BrowserBack)
             {
                 DialPadBackspaceCommand?.Execute(null);
             }

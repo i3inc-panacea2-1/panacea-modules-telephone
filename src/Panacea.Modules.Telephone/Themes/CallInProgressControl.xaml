@@ -130,6 +130,7 @@
                                         <controls:MaterialIcon Icon="call" />
                                     </Button>
                                     <Button
+                                        Visibility="Collapsed"
                                         Name="AnswerVideoButton"
                                         Background="{DynamicResource ColorSuccess}"
                                         controls:Material.AsyncCommand="{TemplateBinding VideoAnswerCommand}">

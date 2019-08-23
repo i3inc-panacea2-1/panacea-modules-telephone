@@ -89,18 +89,15 @@ namespace Panacea.Modules.Telephone.ViewModels
 
             },
             args => Number?.Length > 2);
-            HangUpCommand = new RelayCommand(async args =>
+            HangUpCommand = new AsyncCommand(async args =>
             {
                 //Host.StopRinging();
                 if (_core.TryGetUiManager(out IUiManager ui))
                 {
-                    await ui.DoWhileBusy(async () =>
-                    {
-                        if (_userPhone?.IsIncoming == true && _userPhone?.IsInCall == false) await _userPhone.Reject();
-                        if (_terminalPhone?.IsIncoming == true && _terminalPhone.IsInCall == false) await _terminalPhone.Reject();
-                        if (_userPhone?.IsInCall == true || _userPhone?.IsBusy == true) await _userPhone.HangUp();
-                        if (_terminalPhone?.IsInCall == true || _terminalPhone?.IsBusy == true) await _terminalPhone.HangUp();
-                    });
+                    if (_userPhone?.IsIncoming == true && _userPhone?.IsInCall == false) await _userPhone.Reject();
+                    if (_terminalPhone?.IsIncoming == true && _terminalPhone.IsInCall == false) await _terminalPhone.Reject();
+                    if (_userPhone?.IsInCall == true || _userPhone?.IsBusy == true) await _userPhone.HangUp();
+                    if (_terminalPhone?.IsInCall == true || _terminalPhone?.IsBusy == true) await _terminalPhone.HangUp();
                 }
             });
 
@@ -116,15 +113,15 @@ namespace Panacea.Modules.Telephone.ViewModels
                 await _currentPhone.StopDtmf(args.ToString());
             });
 
-            CallInProgressAnswerCommand = new RelayCommand(args =>
+            CallInProgressAnswerCommand = new AsyncCommand(async args =>
             {
-                _currentPhone?.Answer();
+                await _currentPhone?.Answer();
             },
             args =>
             {
-                return _currentPhone?.IsIncoming == true;
+                return _currentPhone?.IsIncoming == true && _currentPhone?.IsInCall == false;
             });
-            CallInProgressVideoAnswerCommand = new RelayCommand(args =>
+            CallInProgressVideoAnswerCommand = new AsyncCommand(async args =>
             {
 
             },
@@ -266,16 +263,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         private void Ui_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
-            if (e.Key == Key.D3 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-            {
-                DialPadKeyPressCommand?.Execute("#");
-            }
-            else if (e.Key == Key.Multiply || (e.Key == Key.D8 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift))
-            {
-                DialPadKeyPressCommand?.Execute("*");
-            }
-            else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && (e.Key == Key.D4 || e.Key == Key.D3))
+            _core.Logger.Debug(this, e.Key.ToString() + " " + Keyboard.Modifiers);
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 if (e.Key == Key.D4)
                 {
@@ -285,10 +274,19 @@ namespace Panacea.Modules.Telephone.ViewModels
                 {
                     HangUpCommand?.Execute(null);
                 }
+                return;
+            }
+            if (e.Key == Key.D3 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                DialPadKeyPressCommand?.Execute("#");
+            }
+            else if (e.Key == Key.Multiply || (e.Key == Key.D8 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift))
+            {
+                DialPadKeyPressCommand?.Execute("*");
             }
             else if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
             {
-                DialPadKeyPressCommand?.Execute(e.Key.ToString().Replace("D", "".Replace("NumPad", "")));
+                DialPadKeyPressCommand?.Execute(e.Key.ToString().Replace("D", "").Replace("NumPad", ""));
             }
             else if (e.Key == Key.Back || e.Key == Key.BrowserBack)
             {
@@ -1199,9 +1197,9 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public ICommand CallInProgressKeyPressCommand { get; }
 
-        public RelayCommand CallInProgressAnswerCommand { get; }
+        public AsyncCommand CallInProgressAnswerCommand { get; }
 
-        public RelayCommand CallInProgressVideoAnswerCommand { get; }
+        public AsyncCommand CallInProgressVideoAnswerCommand { get; }
 
         public ICommand CallInProgressMuteCommand { get; }
 
@@ -1215,7 +1213,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public ICommand SpeedDialCallCommand { get; }
 
-        public ICommand HangUpCommand { get; }
+        public AsyncCommand HangUpCommand { get; }
 
         public AsyncCommand RemoveCallHistoryItemCommand { get; }
 

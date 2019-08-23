@@ -126,16 +126,16 @@
                                     <Button
                                         Name="AnswerButton"
                                         Background="{DynamicResource ColorSuccess}"
-                                        Command="{TemplateBinding AnswerCommand}">
+                                        controls:Material.AsyncCommand="{TemplateBinding AnswerCommand}">
                                         <controls:MaterialIcon Icon="call" />
                                     </Button>
                                     <Button
                                         Name="AnswerVideoButton"
                                         Background="{DynamicResource ColorSuccess}"
-                                        Command="{TemplateBinding VideoAnswerCommand}">
+                                        controls:Material.AsyncCommand="{TemplateBinding VideoAnswerCommand}">
                                         <controls:MaterialIcon Icon="videocam" />
                                     </Button>
-                                    <Button Background="{DynamicResource ColorError}" Command="{TemplateBinding HangUpCommand}">
+                                    <Button Background="{DynamicResource ColorError}" controls:Material.AsyncCommand="{TemplateBinding HangUpCommand}">
                                         <controls:MaterialIcon Icon="call_end" />
                                     </Button>
                                     <Button Background="{DynamicResource ColorInformation}" Command="{TemplateBinding ToggleDialPadCommand}">

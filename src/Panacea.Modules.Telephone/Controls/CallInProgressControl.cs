@@ -38,15 +38,15 @@ namespace Panacea.Modules.Telephone.Controls
 
 
 
-        public ICommand HangUpCommand
+        public AsyncCommand HangUpCommand
         {
-            get { return (ICommand)GetValue(HangUpCommandProperty); }
+            get { return (AsyncCommand)GetValue(HangUpCommandProperty); }
             set { SetValue(HangUpCommandProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for HangUpCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HangUpCommandProperty =
-            DependencyProperty.Register("HangUpCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
+            DependencyProperty.Register("HangUpCommand", typeof(AsyncCommand), typeof(CallInProgressControl), new PropertyMetadata(null));
 
 
 
@@ -100,25 +100,25 @@ namespace Panacea.Modules.Telephone.Controls
             DependencyProperty.Register("KeyPressCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
 
 
-        public ICommand AnswerCommand
+        public AsyncCommand AnswerCommand
         {
-            get { return (ICommand)GetValue(AnswerCommandProperty); }
+            get { return (AsyncCommand)GetValue(AnswerCommandProperty); }
             set { SetValue(AnswerCommandProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for HangUpCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AnswerCommandProperty =
-            DependencyProperty.Register("AnswerCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
+            DependencyProperty.Register("AnswerCommand", typeof(AsyncCommand), typeof(CallInProgressControl), new PropertyMetadata(null));
 
-        public ICommand VideoAnswerCommand
+        public AsyncCommand VideoAnswerCommand
         {
-            get { return (ICommand)GetValue(VideoAnswerCommandProperty); }
+            get { return (AsyncCommand)GetValue(VideoAnswerCommandProperty); }
             set { SetValue(VideoAnswerCommandProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for HangUpCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoAnswerCommandProperty =
-            DependencyProperty.Register("VideoAnswerCommand", typeof(ICommand), typeof(CallInProgressControl), new PropertyMetadata(null));
+            DependencyProperty.Register("VideoAnswerCommand", typeof(AsyncCommand), typeof(CallInProgressControl), new PropertyMetadata(null));
 
         public ICommand MuteCommand
         {

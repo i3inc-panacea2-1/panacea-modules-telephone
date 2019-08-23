@@ -154,7 +154,7 @@
                                         Command="{TemplateBinding UnmuteCommand}">
                                         <controls:MaterialIcon Icon="mic_off" />
                                     </Button>
-                                    <Button Name="FullScreenButton" Background="{DynamicResource ColorInformation}">
+                                    <Button Visibility="Collapsed" Name="FullScreenButton" Background="{DynamicResource ColorInformation}">
                                         <controls:MaterialIcon Icon="fullscreen" />
                                     </Button>
                                 </StackPanel>

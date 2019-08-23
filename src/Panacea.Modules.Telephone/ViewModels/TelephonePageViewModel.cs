@@ -288,7 +288,7 @@ namespace Panacea.Modules.Telephone.ViewModels
             {
                 DialPadKeyPressCommand?.Execute(e.Key.ToString().Replace("D", "").Replace("NumPad", ""));
             }
-            else if (e.Key == Key.Back || e.Key == Key.BrowserBack || e.Key == Key.None)
+            else if (e.Key == Key.Back || e.Key == Key.BrowserBack || e.Key == Key.None || e.Key == Key.Left)
             {
                 DialPadBackspaceCommand?.Execute(null);
             }

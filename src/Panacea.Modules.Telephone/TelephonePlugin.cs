@@ -25,6 +25,24 @@ namespace Panacea.Modules.Telephone
         Translator _translator = new Translator("Telephone");
         NavigationButtonViewModel _navButton;
         public ObservableCollection<LiveTileFrame> Frames { get; private set; }
+        /*
+      SpeakerPhoneAudioOutDevice=None
+HandsetAudioOutDevice=None
+SpeakerPhoneAudioInDevice=None
+HandsetPhoneAudioInDevice=None   
+    */
+
+        [PanaceaInject("SpeakerPhoneAudioOutDevice", "Set the device to be used as speaker in speakerphone mode. Separate multiple devices with ';'. Case sensitive.", "SpeakerPhoneAudioOutDevice=Realtek;AMD")]
+        protected string SpeakerPhoneAudioOutDevice { get; set; } = "None";
+
+        [PanaceaInject("HandsetAudioOutDevice", "Set the device to be used as speaker for handset mode. Separate multiple devices with ';'. Case sensitive.", "HandsetAudioOutDevice=Realtek;AMD")]
+        protected string HandsetAudioOutDevice { get; set; } = "None";
+
+        [PanaceaInject("SpeakerPhoneAudioInDevice", "Set the devices to be used as microphone for speakerphone mode. Separate multiple devices with ';'. Case sensitive.", "SpeakerPhoneAudioInDevice=Realtek;AMD")]
+        protected string SpeakerPhoneAudioInDevice { get; set; } = "None";
+
+        [PanaceaInject("HandsetAudioInDevice", "Set the devices to be used as microphone for handet mode. Separate multiple devices with ';'. Case sensitive.", "HandsetAudioInDevice=Realtek;AMD")]
+        protected string HandsetAudioInDevice { get; set; } = "None";
 
         public TelephonePlugin(PanaceaServices core)
         {
@@ -49,6 +67,8 @@ namespace Panacea.Modules.Telephone
             {
                 ui.RemoveNavigationBarControl(_navButton);
             }
+            var hw = _core.GetHardwareManager();
+            hw.HandsetStateChanged -= Hw_HandsetStateChanged;
             return Task.CompletedTask;
         }
 
@@ -83,6 +103,12 @@ namespace Panacea.Modules.Telephone
             if (_core.TryGetUiManager(out IUiManager ui))
             {
                 Call();
+            }
+            if(_telephonePage != null)
+            {
+                _telephonePage.SetAudioDevices(
+                    e == HardwareStatus.On ? SpeakerPhoneAudioOutDevice : HandsetAudioOutDevice,
+                    e == HardwareStatus.On ? SpeakerPhoneAudioInDevice: HandsetAudioInDevice );
             }
         }
 

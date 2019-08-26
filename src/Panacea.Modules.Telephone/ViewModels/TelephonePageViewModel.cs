@@ -1193,6 +1193,14 @@ namespace Panacea.Modules.Telephone.ViewModels
             }
         }
 
+        public void SetAudioDevices(string speakers, string microphone)
+        {
+            if(_currentPhone != null)
+            {
+                _currentPhone.SetAudioDevices(speakers, microphone);
+            }
+        }
+
         public ICommand DialPadKeyPressCommand { get; }
 
         public ICommand CallInProgressKeyPressCommand { get; }

@@ -79,6 +79,9 @@ HandsetPhoneAudioInDevice=None
             _ = _telephonePage.GetSettingsAsync();
             var hw = _core.GetHardwareManager();
             hw.HandsetStateChanged += Hw_HandsetStateChanged;
+            _telephonePage.SetAudioDevices(
+                    hw.HandsetState == HardwareStatus.On ? SpeakerPhoneAudioOutDevice : HandsetAudioOutDevice,
+                    hw.HandsetState == HardwareStatus.On ? SpeakerPhoneAudioInDevice : HandsetAudioInDevice);
             if (_core.TryGetUiManager(out IUiManager ui))
             {
                 _navButton = new NavigationButtonViewModel(_core);

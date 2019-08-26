@@ -504,6 +504,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                     }
                 }
                 _currentPhone = telephone;
+                SetAudioDevices(_speakers, _microphone);
                 if (_core.TryGetUiManager(out IUiManager ui))
                 {
                     await ui.DoWhileBusy(async () =>
@@ -1034,6 +1035,9 @@ namespace Panacea.Modules.Telephone.ViewModels
         }
         AppBarControlViewModel _appBar;
         Task _loadingTask;
+        private string _speakers;
+        private string _microphone;
+
         internal async Task GetSettingsAsync()
         {
             var source = new TaskCompletionSource<object>();
@@ -1203,6 +1207,8 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public void SetAudioDevices(string speakers, string microphone)
         {
+            _speakers = speakers;
+            _microphone = microphone;
             if (_currentPhone != null)
             {
                 _currentPhone.SetAudioDevices(speakers, microphone);

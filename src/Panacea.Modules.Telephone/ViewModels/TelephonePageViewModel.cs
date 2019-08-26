@@ -263,7 +263,6 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         private void Ui_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            _core.Logger.Debug(this, e.Key.ToString() + " " + Keyboard.Modifiers);
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 if (e.Key == Key.D4)
@@ -512,7 +511,8 @@ namespace Panacea.Modules.Telephone.ViewModels
             }
             catch (Exception ex)
             {
-                _core.Logger.Debug(this, ex.Message);
+                _core.Logger.Error(this, ex.Message);
+                _core.Logger.Error(this, ex.StackTrace);
             }
         }
 

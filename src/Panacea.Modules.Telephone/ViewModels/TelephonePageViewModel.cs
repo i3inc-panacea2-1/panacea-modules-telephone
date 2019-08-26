@@ -405,7 +405,15 @@ namespace Panacea.Modules.Telephone.ViewModels
             if (_terminalSpeedDials != null && _terminalSpeedDials.Any(d => d.Number == number2))
             {
                 var forceVideo = _terminalSpeedDials.First(d => d.Number == number2).VideoCall;
-                await CallWithLine(_terminalPhone, number2, forceVideo || video);
+                if (_terminalPhone != null)
+                {
+                    await CallWithLine(_terminalPhone, number2, forceVideo || video);
+                }
+                else if (_userPhone != null)
+                {
+                    await CallWithLine(_userPhone, number2, forceVideo || video);
+                }
+                else throw new Exception("No active telephone account found to perform this call");
             }
             else if (!_settings.Settings.RequiresUserSignedIn && (!_core.TryGetBilling(out IBillingManager bill) || bill.IsPluginFree(TELEPHONE)))
             {
@@ -1195,7 +1203,7 @@ namespace Panacea.Modules.Telephone.ViewModels
 
         public void SetAudioDevices(string speakers, string microphone)
         {
-            if(_currentPhone != null)
+            if (_currentPhone != null)
             {
                 _currentPhone.SetAudioDevices(speakers, microphone);
             }

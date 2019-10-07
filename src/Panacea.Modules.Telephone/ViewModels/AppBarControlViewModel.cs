@@ -14,6 +14,7 @@ namespace Panacea.Modules.Telephone.ViewModels
     [View(typeof(AppBarControl))]
     class AppBarControlViewModel : ViewModelBase
     {
+
         public AppBarControlViewModel()
         {
             ClickCommand = new RelayCommand(args =>
@@ -25,7 +26,7 @@ namespace Panacea.Modules.Telephone.ViewModels
                 var dial = args as SpeedDial;
                 TelephonePage?.Call(dial.Number);
             });
-            
+
             HangupCommand = new RelayCommand(args => TelephonePage?.HangUpCommand?.Execute(null));
         }
 
@@ -67,5 +68,11 @@ namespace Panacea.Modules.Telephone.ViewModels
         public RelayCommand CallCommand { get; }
 
         public RelayCommand HangupCommand { get; }
+
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            PopupOpen = false;
+        }
     }
 }
